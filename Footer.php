@@ -17,7 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
+            flex-direction: column;  /* all info or buttons show up in column*/ 
             position: relative;
         }
         .footer a {
@@ -32,14 +32,16 @@
             gap: 10px;
             margin-left: auto;
         }
-        .app-buttons img {
+        .app-buttons img {    /* Adjust size of download options here */
             height: 30px;
             margin-right: 10px;
         }
+  /* Margin size for Footer "Alle rechte Vorbeihalten"*/
         .footer p {
             margin: 10px 0 0;
             font-size: 12px;
         }
+  /* Space between social media icons */
         .social-icons img {
             width: 20px;
             height: 20px;
@@ -54,7 +56,8 @@
             <a href="daten.php">Datenschutzbestimmungen</a>
             <a href="agb.php">AGB</a>
         </div>
-        <div class="footer-right">
+        
+        <div class="footer-right"> <!-- Social-Media-Bereich-->
             <div class="social-icons">
                 <a href="https://www.facebook.com/" target="_blank">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Facebook_icon.svg" alt="Facebook" style="width: 30px; height: 30px; margin: 5px;">
@@ -67,7 +70,7 @@
                 </a>
             </div>
         </div>
-        <div class="footer-section">
+        <div class="footer-section">  <!-- App-Download-Bereich-->
             <div class="app-buttons">
                 <a href="https://www.apple.com/app-store/" target="_blank">
                     <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store">
