@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Netflix-Style Homescreen</title>
+    <title>Autovermietung SSJ</title>
     <style>
         * {
             margin: 0;
@@ -221,13 +221,53 @@
             font-size: 1.2rem;
             text-align: center;
         }
+
+        .filter-container {
+            background: white;
+            padding: 20px;
+            margin: 0 auto;
+            text-align: center;
+            border-radius: 15px;
+            max-width: 900px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .filter-container form {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-container label, .filter-container select, .filter-container input, .filter-container button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            color: black;
+        }
+
+        .filter-container select, .filter-container input {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .filter-container button {
+            background-color: #e50914;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Background Video -->
         <video class="background-video" autoplay muted loop>
-            <source src="auto.mp4" type="video/mp4">
+            <source src="assets/introauto.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
@@ -240,6 +280,27 @@
                 <button class="btn btn-more">Mehr lernen</button>
             </div>
         </div>
+    </div>
+    
+    <div class="filter-container">
+        <form action="https://example.com/autos" method="GET">
+            <label for="location">Ort:</label>
+            <select id="location" name="location" required>
+                <option value="Berlin">Berlin</option>
+                <option value="Hamburg">Hamburg</option>
+                <option value="München">München</option>
+                <option value="Köln">Köln</option>
+                <option value="Frankfurt">Frankfurt</option>
+            </select>
+            
+            <label for="pickup">Abholdatum:</label>
+            <input type="date" id="pickup" name="pickup" required>
+            
+            <label for="return">Rückgabedatum:</label>
+            <input type="date" id="return" name="return" required>
+            
+            <button type="submit">Autos anzeigen</button>
+        </form>
     </div>
 
     <!-- Cars Carousel -->
