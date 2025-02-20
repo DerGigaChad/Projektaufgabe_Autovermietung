@@ -88,7 +88,7 @@ $loggedInUser = isset($_SESSION['username']) ? $_SESSION['username'] : null;
 <body>
     <!-- Header section with logo, navigation, and user info -->
     <header class="header">
-        <div class="logo">Car Rental Service</div>
+        <div class="logo">Vrooom</div>
         
         <!-- Navigation links -->
         <nav class="nav-menu">
