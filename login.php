@@ -16,10 +16,10 @@
 
         /* Container for the login form */
         .login-container {
-            max-width: 400px;
-            margin: 50px auto;
+            max-width: 600px;
+            margin: 70px auto;
             background-color: white;
-            padding: 20px;
+            padding: 40px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
