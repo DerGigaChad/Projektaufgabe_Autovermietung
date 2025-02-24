@@ -16,9 +16,9 @@
 
         /* Container for the contact form */
         .contact-container {
-            max-width: 400px;
+            max-width: 600px;
             margin: 50px auto;
-            padding: 20px;
+            padding: 50px;
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
