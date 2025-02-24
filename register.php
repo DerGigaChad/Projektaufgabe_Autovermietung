@@ -20,11 +20,11 @@
         /* Container for the registration form */
         .registration-container {
             background: white;
-            padding: 30px;
+            padding: 50px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 600px;
             text-align: center;
         }
 
