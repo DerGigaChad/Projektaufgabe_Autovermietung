@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kontakt</title>
     <style>
-        /* Allgemeine Styles */
+        /* <General Styles */
         * {
             margin: 0;
             padding: 0;
@@ -22,7 +22,7 @@
             overflow: hidden;
         }
 
-        /* Hintergrund-Effekt */
+        /* Backgrounf effect */
         .background {
             position: absolute;
             width: 100%;
@@ -32,7 +32,7 @@
             z-index: -1;
         }
 
-        /* Kontakt-Container */
+        /* contact-container */
         .contact-container {
             background: rgba(255, 255, 255, 0.36);
             backdrop-filter: blur(15px);
@@ -57,7 +57,7 @@
             margin-bottom: 25px;
         }
 
-        /* Eingabefelder */
+        /* textfields */
         .contact-form {
             display: flex;
             flex-direction: column;
@@ -97,7 +97,7 @@
             resize: none;
         }
 
-        /* Absenden-Button */
+        /* Send Button */
         .contact-btn {
             background: linear-gradient(135deg, #ff416c, #ff4b2b);
             color: white;
@@ -116,7 +116,7 @@
             box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
         }
 
-        /* Kontaktinfos */
+        /* Contact Information */
         .contact-info {
             text-align: center;
             margin-top: 20px;
@@ -137,12 +137,13 @@
     </style>
 </head>
 <body>
-    <div class="background"></div> <!-- Hintergrund-Effekt -->
+    <!-- background-effect -->
+    <div class="background"></div> 
 
     <div class="contact-container">
         <h1>Kontakt</h1>
 
-        <!-- Kontaktformular -->
+        <!-- Contact sheet-->
         <form class="contact-form" action="process_contact.php" method="POST">
             <label for="name">Ihr Name</label>
             <input type="text" id="name" name="name" class="contact-input" placeholder="Geben Sie Ihren Namen ein" required>
@@ -156,7 +157,7 @@
             <button type="submit" class="contact-btn">Nachricht senden</button>
         </form>
 
-        <!-- Kontaktinformationen -->
+        <!-- Contact information-->
         <div class="contact-info">
             <p>Alternativ per E-Mail: <strong>kontakt@carsharing.de</strong></p>
             <p>Telefon: <strong>+49 123 456 789</strong></p>
