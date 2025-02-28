@@ -379,12 +379,12 @@
         <div class="carousel" id="cities">
             <div class="carousel-item" style="background-image: url('assets/hamburg.jpg');">
                 <div class="carousel-item-text">Hamburg</div>
+            <div class="carousel-item" style="background-image: url('assets/berlin.jpg');">
+                <div class="carousel-item-text">Berlin</div>
+            </div>
             </div>
             <div class="carousel-item" style="background-image: url('assets/bielefeld.jpg');">
                 <div class="carousel-item-text">Bielefeld</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/münchen.jpg');">
-                <div class="carousel-item-text">München</div>
             </div>
             <div class="carousel-item" style="background-image: url('assets/bochum.jpg');">
                 <div class="carousel-item-text">Bochum</div>
@@ -392,37 +392,43 @@
             <div class="carousel-item" style="background-image: url('assets/bremen.jpg');">
                 <div class="carousel-item-text">Bremen</div>
             </div>
+            <div class="carousel-item" style="background-image: url('assets/dortmund.jpg');">
+                <div class="carousel-item-text">Dortmund</div>
+            </div>
+            <div class="carousel-item" style="background-image: url('assets/dresden.jpg');">
+                <div class="carousel-item-text">Dresden</div>
+            </div>
+            <div class="carousel-item" style="background-image: url('assets/freiburg.jpg');">
+                <div class="carousel-item-text">Freiburg</div>
+            </div>
+            <div class="carousel-item" style="background-image: url('assets/hamburg.jpg');">
+                <div class="carousel-item-text">Hamburg</div>
+            </div>
             <div class="carousel-item" style="background-image: url('assets/köln.jpg');">
                 <div class="carousel-item-text">Köln</div>
             </div>
             <div class="carousel-item" style="background-image: url('assets/leipzig.jpg');">
                 <div class="carousel-item-text">Leipzig</div>
             </div>
-            <div class="carousel-item" style="background-image: url('assets/berlin.jpg');">
-                <div class="carousel-item-text">Berlin</div>
+            <div class="carousel-item" style="background-image: url('assets/münchen.jpg');">
+                <div class="carousel-item-text">München</div>
             </div>
-            <div class="carousel-item" style="background-image: url('assets/dresden.jpg');">
-                <div class="carousel-item-text">Dresden</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/dortmund.jpg');">
-                <div class="carousel-item-text">Dortmund</div>
+            <div class="carousel-item" style="background-image: url('assets/nürnberg.jpg');">
+                <div class="carousel-item-text">Nürnberg</div>   
             </div>
             <div class="carousel-item" style="background-image: url('assets/paderborn.jpg');">
                 <div class="carousel-item-text">Paderborn</div>
             </div>
             <div class="carousel-item" style="background-image: url('assets/rostock.jpg');">
                 <div class="carousel-item-text">Rostock</div>   
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/nürnberg.jpg');">
-                <div class="carousel-item-text">Nürnberg</div>   
-            </div>
+    
         </div>
         <button class="carousel-button right" onclick="scrollCarousel('cities', 1)">&gt;</button>
     </div>
 </div>
 
 
-    <div class="review-section" style="background-image: url('assets/frau.jpg');">
+    <div class="review-section" style="background-image: url('assets/road-trip-concept-with-group-friends.jpg');">
         <h2>Kundenrezensionen</h2>
         <div class="review-carousel" id="reviews">
             <div class="review-item">"Toller Service! Sehr zufrieden." - Max M.</div>
