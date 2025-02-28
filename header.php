@@ -6,58 +6,66 @@ $loggedInUser = isset($_SESSION['username']) ? $_SESSION['username'] : null;
 ?>
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Header</title>
     <style>
-        /* Basic styling */
-        body {
-            font-family: Arial, sans-serif;
+        /* Global styles */
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Header styling */
+        body {
+            background: #f8f8f8;
+        }
+
+        /* Header container */
         .header {
-            background-color: rgb(255, 0, 43);
-            color: white;
-            padding: 15px 20px;
+            background: white;
+            width: 100%;
+            padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid rgb(255, 0, 43);
         }
 
-        /* Logo styling */
+        /* Logo */
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
+            color: rgb(255, 0, 43);
         }
 
-        /* Navigation styling */
+        /* Navigation menu */
         .nav-menu {
             display: flex;
-            gap: 15px; /* Spacing between links */
+            gap: 25px;
         }
 
-        /* Styling for navigation links */
         .nav-menu a {
-            color: white;
+            color: #333;
             text-decoration: none;
             font-size: 1rem;
-            padding: 5px 10px;
+            font-weight: bold;
+            padding: 8px 12px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
 
-        /* Hover effect for navigation links */
         .nav-menu a:hover {
-            background-color: rgba(255, 255, 255, 0.04);
+            background-color: rgba(255, 0, 43, 0.1);
         }
 
-        /* User info styling */
+    
+
+        /* User info */
         .user-info {
             display: flex;
             align-items: center;
@@ -66,53 +74,86 @@ $loggedInUser = isset($_SESSION['username']) ? $_SESSION['username'] : null;
             font-weight: bold;
         }
 
-        /* Logout button styling */
+        /* Logout button */
         .logout-btn {
-            background-color: white;
-            color: rgb(255, 0, 43);
-            padding: 5px 12px;
-            font-size: 0.9rem;
+            background: rgb(255, 0, 43);
+            color: white;
+            padding: 8px 12px;
+            font-size: 1rem;
             font-weight: bold;
-            border: 2px solid rgb(255, 0, 43);
+            border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: 0.3s ease;
         }
 
         .logout-btn:hover {
-            background-color: rgb(255, 0, 43);
-            color: white;
+            background: rgb(200, 0, 35);
+        }
+
+        /* Login link */
+        .login-link {
+            text-decoration: none;
+            color: rgb(255, 0, 43);
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-link:hover {
+            background-color: rgba(255, 0, 43, 0.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header section with logo, navigation, and user info -->
+    <!-- Header container -->
     <header class="header">
         <div class="logo">Vrooom</div>
         
-        <!-- Navigation links -->
+        <!-- Navigation menu -->
         <nav class="nav-menu">
-            <a href="booking.php">Meine Buchung</a>
-            <a href="productoverview.php">Detailsuche</a>
+            <a href="booking.php">Meine Buchungen</a>
             <a href="contact.php">Kontakt</a>
+            <!-- Detail Search Button -->
+            <a href="productoverview.php" class="detail-search-btn">Detailsuche</a>
         </nav>
-        
-        <!-- User info: Greeting, login or logout -->
+
+        <!-- User info -->
         <div class="user-info">
             <?php if ($loggedInUser): ?>
-                <!-- If user is logged in, display their name -->
-                Hallo, <a href="booking.php" style="color: white; text-decoration: none; font-weight: bold;">
+                <!-- Display username if logged in -->
+                Hello, <a href="booking.php" style="color: rgb(255, 0, 43); text-decoration: none; font-weight: bold;">
                     <?php echo htmlspecialchars($loggedInUser); ?>
                 </a>
 
-                <!-- Logout button (uses POST for security) -->
+                <!-- Logout button -->
                 <form action="logout.php" method="POST" style="display: inline;">
-                    <button type="submit" class="logout-btn">Abmelden</button>
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
                 
             <?php else: ?>
-                <!-- If user is not logged in, display a login link -->
-                <a href="login.php" style="color: white;">Anmelden</a>
+                <!-- Display login link if not logged in -->
+                <a href="login.php" class="login-link">Anmelden</a>
             <?php endif; ?>
         </div>
     </header>
