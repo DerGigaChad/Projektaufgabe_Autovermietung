@@ -148,7 +148,7 @@ $loggedInUser = isset($_SESSION['username']) ? $_SESSION['username'] : null;
 
                 <!-- Logout button -->
                 <form action="logout.php" method="POST" style="display: inline;">
-                    <button type="submit" class="logout-btn">Logout</button>
+                    <button type="submit" class="logout-btn">Abmelden</button>
                 </form>
                 
             <?php else: ?>
