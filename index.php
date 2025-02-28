@@ -5,6 +5,7 @@
     include("header.php");
     ?>
     
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -92,6 +93,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             color: black;
         }
+        
 
         /* Carousels */
         .carousel-wrapper {
@@ -282,7 +284,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 150px; /* Höhe des Effekts */
+            height: 50px; /* Höhe des Effekts */
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
             pointer-events: none; /* Damit es keine Klicks blockiert */
             z-index: 999;
@@ -574,7 +576,7 @@
 
     .stats-title {
         font-size: 2rem;
-        color: #ff4b2b;
+        color:rgb(251, 248, 247);
         margin-bottom: 20px;
     }
 
@@ -596,7 +598,7 @@
     .stat-number {
         font-size: 2.5rem;
         font-weight: bold;
-        color: #ff4b2b;
+        color: #e50914;
     }
 
     .stat-box p {
