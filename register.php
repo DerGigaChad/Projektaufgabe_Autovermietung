@@ -1,124 +1,209 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <style>
-        /* Basic page styles */
-        body {
-            font-family: Arial, sans-serif;
+        /* Global styles */
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1e1e, #3a3a3a);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        /* Container for the registration form */
-        .registration-container {
-            background: white;
-            padding: 50px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        /* Background effect */
+        .background {
+            position: absolute;
             width: 100%;
-            max-width: 600px;
+            height: 100%;
+            background: url('assets/bg-pattern.jpg') no-repeat center center/cover;
+            filter: blur(8px);
+            z-index: -1;
+        }
+
+        /* Registration container */
+        .register-container {
+            background: rgba(255, 255, 255, 0.36);
+            backdrop-filter: blur(15px);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
             text-align: center;
+            color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Form title */
+        .register-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
         h1 {
-            color: #333;
-            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 2rem;
+            margin-bottom: 25px;
         }
 
-        /* Form group styling */
+        /* Form styling */
+        .register-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .form-group {
+            width: 100%;
             text-align: left;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
-        /* Input label styling */
         label {
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
             display: block;
-            font-weight: bold;
             margin-bottom: 5px;
         }
 
         /* Input field styling */
-        .registration-input {
+        .register-input {
             width: 100%;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            outline: none;
+            transition: 0.3s ease;
+            display: block;
         }
 
-        /* Register button styling */
+        .register-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .register-input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Register button */
         .register-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color:rgb(255, 0, 43);
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
             color: white;
-            font-size: 1rem;
+            padding: 15px;
+            font-size: 1.1rem;
             font-weight: bold;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
+            transition: all 0.3s ease;
+            width: 100%;
         }
 
-        /* Hover effect  button */
         .register-btn:hover {
-            background-color:rgb(215, 127, 141);
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+        }
+
+        /* Login link */
+        .login-link {
+            margin-top: 18px;
+            font-size: 1rem;
+        }
+
+        .login-link a {
+            color: #ff416c;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #ff4b2b;
+            text-decoration: underline;
+        }
+
+        /* Error message */
+        .error-message {
+            color: #ff4b2b;
+            background: rgba(255, 75, 43, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 480px) {
+            .register-container {
+                width: 90%;
+                padding: 40px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Container for the registration form -->
-    <div class="registration-container">
+    <div class="background"></div>
+
+    <!-- Registration container -->
+    <div class="register-container">
         <h1>Registrierung</h1>
-        
+
         <!-- Registration form -->
-        <form action="register_process.php" method="POST">
-            
-            <!-- Input field: First name -->
+        <form action="register_process.php" method="POST" class="register-form">
+
+            <!-- First name -->
             <div class="form-group">
                 <label for="first-name">Vorname</label>
-                <input type="text" id="first-name" name="first_name" class="registration-input" required>
+                <input type="text" id="first-name" name="first_name" class="register-input" required>
             </div>
-            
-            <!-- Input field: Last name -->
+
+            <!-- Last name -->
             <div class="form-group">
                 <label for="last-name">Nachname</label>
-                <input type="text" id="last-name" name="last_name" class="registration-input" required>
+                <input type="text" id="last-name" name="last_name" class="register-input" required>
             </div>
-            
-            <!-- Input field: Email -->
+
+            <!-- Email -->
             <div class="form-group">
-                <label for="email">E-Mail-Adresse</label>
-                <input type="email" id="email" name="email" class="registration-input" required>
+                <label for="email">Email-Adresse</label>
+                <input type="email" id="email" name="email" class="register-input" required>
             </div>
-            
-            <!-- Input field: Password -->
+
+            <!-- Password -->
             <div class="form-group">
                 <label for="password">Passwort</label>
-                <input type="password" id="password" name="password" class="registration-input" required>
+                <input type="password" id="password" name="password" class="register-input" required>
             </div>
-            
-            <!-- Input field: Confirm Password -->
+
+            <!-- Confirm password -->
             <div class="form-group">
-                <label for="confirm-password">Passwort bestätigen</label>
-                <input type="password" id="confirm-password" name="confirm_password" class="registration-input" required>
+                <label for="confirm-password">Password bestätigen</label>
+                <input type="password" id="confirm-password" name="confirm_password" class="register-input" required>
             </div>
-            
+
             <!-- Register button -->
             <button type="submit" class="register-btn">Registrieren</button>
         </form>
+
+        <!-- Link to login -->
+        <p class="login-link">Haben Sie bereits einen Account? <a href="login.php">Anmelden</a></p>
     </div>
 </body>
 </html>
