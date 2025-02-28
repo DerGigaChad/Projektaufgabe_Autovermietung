@@ -6,7 +6,7 @@
     <title>Login | Vrooom</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* Allgemeine Styles */
+        /* Styling */
         * {
             margin: 0;
             padding: 0;
@@ -23,7 +23,7 @@
             overflow: hidden;
         }
 
-        /* Hintergrund-Effekt */
+        /* Background effect */
         .background {
             position: absolute;
             width: 100%;
@@ -37,11 +37,11 @@
         .login-container {
             background: rgba(255, 255, 255, 0.36);
             backdrop-filter: blur(15px);
-            padding: 50px; /* Mehr Platz im Container */
+            padding: 50px; /* More space in container */
             border-radius: 15px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             width: 100%;
-            max-width: 500px; /* Breiter */
+            max-width: 500px; /* wider */
             text-align: center;
             color: white;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -62,7 +62,7 @@
         .login-form {
             display: flex;
             flex-direction: column;
-            gap: 18px; /* Mehr Abstand */
+            gap: 18px; /* More space */
         }
 
         label {
@@ -73,7 +73,7 @@
         }
 
         .login-input {
-            padding: 15px; /* Größere Felder */
+            padding: 15px; 
             font-size: 1.1rem;
             border: none;
             border-radius: 10px;
@@ -96,7 +96,7 @@
         .login-btn {
             background: linear-gradient(135deg, #ff416c, #ff4b2b);
             color: white;
-            padding: 15px; /* Größerer Button */
+            padding: 15px; /* bigger Button */
             font-size: 1.1rem;
             font-weight: bold;
             border: none;
@@ -111,7 +111,7 @@
             box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
         }
 
-        /* Registrierungs-Link */
+
         .register-link {
             margin-top: 18px;
             font-size: 1rem;
@@ -129,7 +129,7 @@
             text-decoration: underline;
         }
 
-        /* Fehlermeldungen */
+        /* error message */
         .error-message {
             color: #ff4b2b;
             background: rgba(255, 75, 43, 0.2);
@@ -179,7 +179,7 @@
             <button type="submit" class="login-btn">Anmelden</button>
         </form>
         
-        <!-- Registrierungs-Link -->
+        <!-- Registration-Link -->
         <div class="register-link">
             <p>Noch kein Konto? <a href="register.php">Registrieren</a></p>
         </div>
