@@ -1,52 +1,58 @@
-
 <?php
-session_start();
-
-// Connect to the database
-$conn = new mysqli("localhost", "root", "", "car_rental");
-
-// Check database connection
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+// Stelle sicher, dass nur eine Session gestartet wird
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
 }
 
-// Check if the form was submitted
+ob_start(); // Buffer aktivieren, um Probleme mit Header-Weiterleitungen zu vermeiden
+
+// Fehleranzeige aktivieren
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+$conn = new mysqli("localhost", "root", "", "car_rental");
+
+// Prüfe, ob die Verbindung zur Datenbank erfolgreich ist
+if ($conn->connect_error) {
+    die("Verbindung fehlgeschlagen: " . $conn->connect_error);
+}
+
+// Prüfe, ob das Formular abgeschickt wurde
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST["email"]);
     $password = trim($_POST["password"]);
 
-    // Retrieve user data from the database
-    $sql = "SELECT id, username, password FROM users WHERE email = ?";
-    $stmt = $conn->prepare($sql);
+    // Nutze die richtigen Spaltennamen aus der Datenbank: 'UserID', 'Name', 'Password'
+    $stmt = $conn->prepare("SELECT UserID, Name, Password FROM users WHERE Email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
 
-    // Check if the user exists
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($user_id, $username, $hashed_password);
+        $stmt->bind_result($user_id, $name, $db_password);
         $stmt->fetch();
 
-        // Debugging: Display the entered password and the stored hash
-        echo "Entered password: " . $password . "<br>";
-        echo "Stored password hash: " . $hashed_password . "<br>";
-
-        // Password verification
-        if (password_verify($password, $hashed_password)) {
+        //  Kein `password_verify()`, da die Passwörter im Klartext gespeichert sind
+        if ($password === $db_password) {
+            // Session-Variablen setzen
             $_SESSION["user_id"] = $user_id;
-            $_SESSION["username"] = $username;
+            $_SESSION["username"] = $name;
 
-            // Redirect to the booking page
-            header("Location: booking.php");
+            // Automatische Weiterleitung zur Startseite
+            header("Location: index.php");
             exit;
         } else {
-            echo "<p style='color: red;'> Incorrect password!</p>";
+            // Falsches Passwort → Zurück zur Login-Seite mit Fehlermeldung
+            header("Location: login.php?error=wrongpassword");
+            exit;
         }
     } else {
-        echo "<p style='color: red;'> User not found!</p>";
+        // Benutzer nicht gefunden → Zurück zur Login-Seite mit Fehlermeldung
+        header("Location: login.php?error=usernotfound");
+        exit;
     }
 }
 
-// Close database connection
 $conn->close();
+ob_end_flush();
 ?>
