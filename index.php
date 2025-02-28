@@ -427,7 +427,209 @@
     </div>
 </div>
 
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Über uns - Vrooom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Allgemeines Styling */
+        body {
+            background-color: #1e1e1e;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
+        /* Über-uns Sektion */
+        .about-section {
+            background: linear-gradient(135deg, #222, #111);
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .about-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .about-title {
+            font-size: 2.5rem;
+            color:#e5091;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .about-text {
+            font-size: 1.2rem;
+            color: #ccc;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        /* Vorteile Liste */
+        .about-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            display: inline-block;
+            margin: 20px auto;
+        }
+
+        .about-list li {
+            font-size: 1.2rem;
+            color: #eee;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .about-list li::before {
+            content: "🚗";
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color:rgb(214, 22, 22);
+        }
+
+        /* Call-to-Action */
+        .cta-button {
+            background: linear-gradient(135deg, #ff4b2b, #ff2e63);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #ff2e63, #ff4b2b);
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- About us -->
+    <section class="about-section">
+        <div class="about-container">
+            <h2 class="about-title">Willkommen bei Vrooom</h2>
+            <p class="about-text">
+                Mobilität bedeutet Freiheit – und bei <strong>Vrooom</strong> stehen Sie immer an erster Stelle.  
+                Wir bieten Ihnen moderne Fahrzeuge, flexible Mietoptionen und eine unkomplizierte Buchung –  
+                alles, was Sie brauchen, um schnell und stilvoll unterwegs zu sein.
+            </p>
+
+            <ul class="about-list">
+                <li>Große Auswahl – vom Cityflitzer bis zur Luxuslimousine.</li>
+                <li>Flexible Mietzeiten – stundenweise, täglich oder langfristig.</li>
+                <li>Transparente Preise – keine versteckten Kosten, keine Überraschungen.</li>
+                <li>Einfache Buchung – in wenigen Klicks zum Traumauto.</li>
+            </ul>
+
+            <a href="booking.php" class="cta-button">Jetzt Auto mieten</a>
+        </div>
+    </section>
+
+</body>
+</html>
+
+<!-- Statistics -->
+<section class="stats-section">
+    <h2 class="stats-title">Warum Vrooom?</h2>
+    <div class="stats-container">
+        <div class="stat-box">
+            <h3 class="stat-number"><span class="stat-value" data-count="50000">0</span></h3>
+            <p>Fahrzeuge vermietet</p>
+        </div>
+        <div class="stat-box">
+            <h3 class="stat-number"><span class="stat-value" data-count="98">0</span>%</h3>
+            <p>Kundenzufriedenheit</p>
+        </div>
+    </div>
+</section>
+
+<style>
+    .stats-section {
+        text-align: center;
+        padding: 50px 20px;
+        background: linear-gradient(135deg, #222, #111); /* Hintergrund angepasst */
+        color: white;
+    }
+
+    .stats-title {
+        font-size: 2rem;
+        color: #ff4b2b;
+        margin-bottom: 20px;
+    }
+
+    .stats-container {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+    }
+
+    .stat-box {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        width: 200px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #ff4b2b;
+    }
+
+    .stat-box p {
+        font-size: 1.1rem;
+        color: white;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let stats = document.querySelectorAll(".stat-value");
+        stats.forEach(stat => {
+            let count = 0;
+            let target = parseInt(stat.getAttribute("data-count"));
+            let increment = target / 100;
+
+            let updateCount = () => {
+                count += increment;
+                if (count < target) {
+                    stat.innerText = Math.ceil(count);
+                    requestAnimationFrame(updateCount);
+                } else {
+                    stat.innerText = target;
+                }
+            };
+            updateCount();
+        });
+    });
+</script>
+
+
+</body>
+</html>
     <div class="review-section" style="background-image: url('assets/road-trip-concept-with-group-friends.jpg');">
         <h2>Kundenrezensionen</h2>
         <div class="review-carousel" id="reviews">
