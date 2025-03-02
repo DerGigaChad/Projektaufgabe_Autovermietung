@@ -94,60 +94,95 @@
             color: black;
         }
         
+    /* Vehicle Classes Section (Static Grid) */
+.vehicle-classes {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping to the next line if necessary */
+    gap: 20px; /* Space between images */
+    justify-content: center; /* Centers items horizontally */
+    padding: 20px 0;
+}
 
-        /* Carousels */
-        .carousel-wrapper {
-            position: relative;
-        }
+.vehicle-class-item {
+    flex: 0 0 150px; /* Fixed width */
+    height: 100px; /* Fixed height */
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    text-decoration: none; /* Removes underline from links */
+}
 
-        .carousel {
-            margin: 20px 0;
-            padding: 20px;
-            overflow: hidden;
-            display: flex;
-            scroll-behavior: smooth;
-        }
+.vehicle-class-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+}
 
-        .carousel-item {
-            flex: 0 0 auto;
-            width: 200px;
-            height: 300px;
-            margin-right: 15px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 10px;
-            position: relative;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Schatten hinzugefügt */
-        }
+.vehicle-class-text {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+            /* Carousels */
+            .carousel-wrapper {
+                position: relative;
+            }
 
-        .carousel-item:hover {
-            transform: scale(1.1); /* Größer bei Hover */
-            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5); /* Intensiverer Schatten */
-        }
+            .carousel {
+                margin: 20px 0;
+                padding: 20px;
+                overflow: hidden;
+                display: flex;
+                scroll-behavior: smooth;
+            }
 
-        .carousel-item-text {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
+            .carousel-item {
+                flex: 0 0 auto;
+                width: 200px;
+                height: 300px;
+                margin-right: 15px;
+                background-size: cover;
+                background-position: center;
+                border-radius: 10px;
+                position: relative;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Schatten hinzugefügt */
+            }
 
-        .carousel-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            border: none;
-            color: white;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 1;
-        }
+            .carousel-item:hover {
+                transform: scale(1.1); /* Größer bei Hover */
+                box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5); /* Intensiverer Schatten */
+            }
+
+            .carousel-item-text {
+                position: absolute;
+                bottom: 10px;
+                left: 10px;
+                background-color: rgba(0, 0, 0, 0.6);
+                color: white;
+                padding: 5px 10px;
+                border-radius: 5px;
+                font-size: 0.9rem;
+            }
+
+            .carousel-button {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: rgba(0, 0, 0, 0.5);
+                border: none;
+                color: white;
+                padding: 10px;
+                cursor: pointer;
+                z-index: 1;
+            }
 
             .carousel-button.left {
                 left: 10px;
@@ -335,40 +370,36 @@
         </form>
     </div>
 
-    <!-- Cars Carousel -->
-    <div class="section">
-        <div class="section-header"
-            <h2>Fahrzeugklassen</h2>
-            <a href="#" class="browse-all">Alle durchstöbern</a>
-        </div>
-        <div class="carousel-wrapper">
-            <button class="carousel-button left" onclick="scrollCarousel('cars', -1)">&lt;</button>
-            <div class="carousel" id="cars">
-                <div class="carousel-item" style="background-image: url('assets/coupe.jpg');">
-                    <div class="carousel-item-text">Coupés</div>
-                </div>
-                <div class="carousel-item" style="background-image: url('assets/limousine.jpg');">
-                    <div class="carousel-item-text">Limousinen</div>
-                </div>
-                <div class="carousel-item" style="background-image: url('assets/suv.jpg');">
-                    <div class="carousel-item-text">SUVs</div>
-                </div>
-                <div class="carousel-item" style="background-image: url('assets/combi.jpg');">
-                    <div class="carousel-item-text">Combis</div>
-                </div>
-                <div class="carousel-item" style="background-image: url('assets/mehrsitzer.jpg');">
-                    <div class="carousel-item-text">Mehrsitzer</div>
-                </div>
-                <div class="carousel-item" style="background-image: url('assets/cabrio.webp');">
-                    <div class="carousel-item-text">Cabrios</div>
-                </div>
-                <div class="carousel-item" style="background-image: url('assets/cabriolet.jpg');">
-                    <div class="carousel-item-text">Cabriolets</div>
-                </div>
-            </div>
-            <button class="carousel-button right" onclick="scrollCarousel('cars', 1)">&gt;</button>
-        </div>
+<!-- Vehicle Classes Carousel -->
+<div class="section">
+    <div class="section-header">
+        <h2>Fahrzeugklassen</h2>
+        <a href="#" class="browse-all">Alle durchstöbern</a>
     </div>
+    <div class="vehicle-classes">
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/cabrio1.jpg');">
+            <div class="vehicle-class-text">Cabrios</div>
+        </a>
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/cabriolet1.jpg');">
+            <div class="vehicle-class-text">Cabriolets</div>
+        </a>
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/combi1.jpg');">
+            <div class="vehicle-class-text">Kombis</div>
+        </a>
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/coupe1.jpg');">
+            <div class="vehicle-class-text">Coupés</div>
+        </a>
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/limousine1.jpg');">
+            <div class="vehicle-class-text">Limousinen</div>
+        </a>
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/mehrsitzer1.jpg');">
+            <div class="vehicle-class-text">Mehrsitzer</div>
+        </a>
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/suv1.jpg');">
+            <div class="vehicle-class-text">SUVs</div>
+        </a>
+    </div>
+</div>
 
     <!-- Cities Carousel -->
 <div class="section">
@@ -815,7 +846,7 @@
 
 </body>
 </html>
-    <div class="review-section" style="background-image: url('assets/road-trip-concept-with-group-friends.jpg');">
+    <div class="review-section" style="background-image: url('assets/roadtrip.jpg');">
         <h2>Kundenrezensionen</h2>
         <div class="review-carousel" id="reviews">
             <div class="review-item">"Toller Service! Sehr zufrieden." - Max M.</div>
