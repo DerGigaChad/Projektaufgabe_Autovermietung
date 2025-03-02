@@ -728,7 +728,7 @@
             </button>
         </div>
         <div class="about-image">
-            <img src="background.jpg" alt="Car Rental Image">
+            <img src="Pic-carrental.jpg" alt="Car Rental Image">
     </div>
 </section>
 </body>
