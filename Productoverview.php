@@ -1,9 +1,13 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+?>
+<?php
 // Database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "tes23";
+$database = "car_rental";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
