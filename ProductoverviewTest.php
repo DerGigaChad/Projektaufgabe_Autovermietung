@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "test1";
+$database = "tes23";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
@@ -29,7 +29,7 @@ $pickup = isset($_GET['pickup']) ? $conn->real_escape_string($_GET['pickup']) : 
 $return = isset($_GET['return']) ? $conn->real_escape_string($_GET['return']) : '';
 
 //Reset all filters
-$filterFields = ['manufacturer', 'vehicleType', 'location']; // List of all filters
+$filterFields = ['manufacturer', 'vehicleType', 'location', 'transmission']; // List of all filters
 
 if (isset($_GET['reset'])) {
     // empty all filters
@@ -87,7 +87,19 @@ if (!empty($drive)) {
 if (!empty($price)) {
     $sql_filtered .= " AND m.PricePerDay <= $price";
 }
-$sql_filtered .= " ORDER BY $sort LIMIT 1000";
+
+$limit = 25; // Number of results per page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Get current page
+if ($page < 1) $page = 1; // Ensure page is at least 1
+$offset = ($page - 1) * $limit; // Calculate offset for SQL query
+
+// Get the total number of results
+$totalQuery = $conn->query("SELECT COUNT(*) FROM vehicles"); 
+$totalResults = $totalQuery->fetch_row()[0];
+$totalPages = ceil($totalResults / $limit);
+
+$sql_filtered .= " ORDER BY $sort";
+$sql_filtered .= " LIMIT $limit OFFSET $offset";
 $result_filtered = $conn->query($sql_filtered);
 echo "Total rows found: " . $result_filtered->num_rows;
 
@@ -100,6 +112,33 @@ echo "Total rows found: " . $result_filtered->num_rows;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produktübersicht - Autovermietung</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+</style>
 </head>
 <body>
     <h1>Verfügbare Fahrzeuge</h1>
@@ -200,6 +239,18 @@ echo "Total rows found: " . $result_filtered->num_rows;
             </tr>
         <?php endwhile; ?>
     </table>
+    <div class="pagination">
+    <!-- Previous Button -->
+    <a href="?<?= http_build_query(array_merge($_GET, ['page' => max(1, $page - 1)])) ?>" 
+       class="button <?= ($page <= 1) ? 'disabled' : '' ?>">❮ Prev</a>
+
+    <!-- Page Info -->
+    <span>Page <?= $page ?> of <?= $totalPages ?></span>
+
+    <!-- Next Button -->
+    <a href="?<?= http_build_query(array_merge($_GET, ['page' => min($totalPages, $page + 1)])) ?>" 
+       class="button <?= ($page >= $totalPages) ? 'disabled' : '' ?>">Next ❯</a>
+    </div>
 </body>
 </html>
 
