@@ -315,7 +315,7 @@
     <div class="vignette"></div>
 
     <div class="filter-container">
-        <form action="https://example.com/autos" method="GET">
+        <form action="productoverview.php" method="GET">
             <label for="location">Ort:</label>
             <select id="location" name="location" required>
                 <option value="Berlin">Berlin</option>
@@ -377,53 +377,50 @@
         <a href="#" class="browse-all">Alle durchstöbern</a>
     </div>
     <div class="carousel-wrapper">
-        <button class="carousel-button left" onclick="scrollCarousel('cities', -1)">&lt;</button>
-        <div class="carousel" id="cities">
-            <div class="carousel-item" style="background-image: url('assets/hamburg.jpg');">
-                <div class="carousel-item-text">Hamburg</div>
-            <div class="carousel-item" style="background-image: url('assets/berlin.jpg');">
-                <div class="carousel-item-text">Berlin</div>
-            </div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/bielefeld.jpg');">
-                <div class="carousel-item-text">Bielefeld</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/bochum.jpg');">
-                <div class="carousel-item-text">Bochum</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/bremen.jpg');">
-                <div class="carousel-item-text">Bremen</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/dortmund.jpg');">
-                <div class="carousel-item-text">Dortmund</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/dresden.jpg');">
-                <div class="carousel-item-text">Dresden</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/freiburg.jpg');">
-                <div class="carousel-item-text">Freiburg</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/hamburg.jpg');">
-                <div class="carousel-item-text">Hamburg</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/köln.jpg');">
-                <div class="carousel-item-text">Köln</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/leipzig.jpg');">
-                <div class="carousel-item-text">Leipzig</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/münchen.jpg');">
-                <div class="carousel-item-text">München</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/nürnberg.jpg');">
-                <div class="carousel-item-text">Nürnberg</div>   
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/paderborn.jpg');">
-                <div class="carousel-item-text">Paderborn</div>
-            </div>
-            <div class="carousel-item" style="background-image: url('assets/rostock.jpg');">
-                <div class="carousel-item-text">Rostock</div>   
-    
+    <button class="carousel-button left" onclick="scrollCarousel('cities', -1)">&lt;</button>
+    <div class="carousel" id="cities">
+        <a href="Productoverview.php?location=Hamburg" class="carousel-item" style="background-image: url('assets/hamburg.jpg');">
+            <div class="carousel-item-text">Hamburg</div>
+        </a>
+        <a href="Productoverview.php?location=Berlin" class="carousel-item" style="background-image: url('assets/berlin.jpg');">
+            <div class="carousel-item-text">Berlin</div>
+        </a>
+        <a href="Productoverview.php?location=Bielefeld" class="carousel-item" style="background-image: url('assets/bielefeld.jpg');">
+            <div class="carousel-item-text">Bielefeld</div>
+        </a>
+        <a href="Productoverview.php?location=Bochum" class="carousel-item" style="background-image: url('assets/bochum.jpg');">
+            <div class="carousel-item-text">Bochum</div>
+        </a>
+        <a href="Productoverview.php?location=Bremen" class="carousel-item" style="background-image: url('assets/bremen.jpg');">
+            <div class="carousel-item-text">Bremen</div>
+        </a>
+        <a href="Productoverview.php?location=Dortmund" class="carousel-item" style="background-image: url('assets/dortmund.jpg');">
+            <div class="carousel-item-text">Dortmund</div>
+        </a>
+        <a href="Productoverview.php?location=Dresden" class="carousel-item" style="background-image: url('assets/dresden.jpg');">
+            <div class="carousel-item-text">Dresden</div>
+        </a>
+        <a href="Productoverview.php?location=Freiburg" class="carousel-item" style="background-image: url('assets/freiburg.jpg');">
+            <div class="carousel-item-text">Freiburg</div>
+        </a>
+        <a href="Productoverview.php?location=Köln" class="carousel-item" style="background-image: url('assets/köln.jpg');">
+            <div class="carousel-item-text">Köln</div>
+        </a>
+        <a href="Productoverview.php?location=Leipzig" class="carousel-item" style="background-image: url('assets/leipzig.jpg');">
+            <div class="carousel-item-text">Leipzig</div>
+        </a>
+        <a href="Productoverview.php?location=München" class="carousel-item" style="background-image: url('assets/münchen.jpg');">
+            <div class="carousel-item-text">München</div>
+        </a>
+        <a href="Productoverview.php?location=Nürnberg" class="carousel-item" style="background-image: url('assets/nürnberg.jpg');">
+            <div class="carousel-item-text">Nürnberg</div>
+        </a>
+        <a href="Productoverview.php?location=Paderborn" class="carousel-item" style="background-image: url('assets/paderborn.jpg');">
+            <div class="carousel-item-text">Paderborn</div>
+        </a>
+        <a href="Productoverview.php?location=Rostock" class="carousel-item" style="background-image: url('assets/rostock.jpg');">
+            <div class="carousel-item-text">Rostock</div>
+        </a>
         </div>
         <button class="carousel-button right" onclick="scrollCarousel('cities', 1)">&gt;</button>
     </div>
