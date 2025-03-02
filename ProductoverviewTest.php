@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "car_rental";
+$database = "test1";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
@@ -27,6 +27,22 @@ $price = isset($_GET['price']) ? floatval($_GET['price']) : '';
 $sort = isset($_GET['sort']) ? $conn->real_escape_string($_GET['sort']) : 'PricePerDay ASC';
 $pickup = isset($_GET['pickup']) ? $conn->real_escape_string($_GET['pickup']) : '';
 $return = isset($_GET['return']) ? $conn->real_escape_string($_GET['return']) : '';
+
+//Reset all filters
+$filterFields = ['manufacturer', 'vehicleType', 'location']; // List of all filters
+
+if (isset($_GET['reset'])) {
+    // empty all filters
+    foreach ($filterFields as $field) {
+        $$field = ''; 
+    }
+} else {
+    // Werte aus dem Formular übernehmen
+    foreach ($filterFields as $field) {
+        $$field = isset($_GET[$field]) ? $_GET[$field] : '';
+    }
+}
+
 
 // Construct SQL query with filters
 $sql_filtered = "SELECT v.*, m.Manufacturer, m.ModelName, m.VehicleType, m.SeatCount, m.Transmission, m.FuelType, m.PricePerDay, l.City 
@@ -89,27 +105,62 @@ echo "Total rows found: " . $result_filtered->num_rows;
     <h1>Verfügbare Fahrzeuge</h1>
     
     <!-- Filter Form -->
-    <form method="GET" action="Productoverview.php">
-        <label for="location">Ort:</label>
-        <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($location); ?>">
+    <form method="GET" action="Productoverviewtest.php">
+        <label for="location">Standort:</label>
+        <select id="location" name="location">
+            <option value="">alle</option>
+            <option value="Berlin" <?= $location == 'Berlin' ? 'selected' : '' ?>>Berlin</option>
+            <option value="Hamburg" <?= $location == 'Hamburg' ? 'selected' : '' ?>>Hamburg</option>
+            <option value="München" <?= $location == 'München' ? 'selected' : '' ?>>München</option>
+            <option value="Köln" <?= $location == 'Köln' ? 'selected' : '' ?>>Köln</option>
+            <option value="Bochum" <?= $location == 'Bochum' ? 'selected' : '' ?>>Bochum</option>
+            <option value="Rostock" <?= $location == 'Rostock' ? 'selected' : '' ?>>Rostock</option>
+            <option value="Paderborn" <?= $location == 'Paderborn' ? 'selected' : '' ?>>Paderborn</option>
+            <option value="Leipzig" <?= $location == 'Leipzig' ? 'selected' : '' ?>>Leipzig</option>
+            <option value="Dortmund" <?= $location == 'Dortmund' ? 'selected' : '' ?>>Dortmund</option>
+            <option value="Freiburg" <?= $location == 'Freiburg' ? 'selected' : '' ?>>Freiburg</option>
+            <option value="Bremen" <?= $location == 'Bremen' ? 'selected' : '' ?>>Bremen</option>
+            <option value="Dresden" <?= $location == 'Dresden' ? 'selected' : '' ?>>Dresden</option>
+            <option value="Bielefeld" <?= $location == 'Bielefeld' ? 'selected' : '' ?>>Bielefeld</option>
+            <option value="Nürnberg" <?= $location == 'Nürnberg' ? 'selected' : '' ?>>Nürnberg</option>
+        </select>
         
         <label for="manufacturer">Hersteller:</label>
         <select id="manufacturer" name="manufacturer">
-            <option value="">alle</option>
-            <option value="BMW">BMW</option>
-            <option value="Audi">Audi</option>
+        <option value="" <?= $manufacturer == '' ? 'selected' : '' ?>>Alle</option>
+        <option value="BMW" <?= $manufacturer == 'BMW' ? 'selected' : '' ?>>BMW</option>
+        <option value="Audi" <?= $manufacturer == 'Audi' ? 'selected' : '' ?>>Audi</option>
+        <option value="Ford" <?= $manufacturer == 'Ford' ? 'selected' : '' ?>>Ford</option>
+        <option value="Volkswagen" <?= $manufacturer == 'Volkswagen' ? 'selected' : '' ?>>Volkswagen</option>
+        <option value="Opel" <?= $manufacturer == 'Opel' ? 'selected' : '' ?>>Opel</option>
+        <option value="Skoda" <?= $manufacturer == 'Skoda' ? 'selected' : '' ?>>Skoda</option>
         </select>
         
         <label for="vehicleType">Typ:</label>
         <select id="vehicleType" name="vehicleType">
-            <option value="">alle</option>
-            <option value="SUV">SUV</option>
+            <option value="" <?= $vehicleType == '' ? 'selected' : '' ?>>Alle</option>
+            <option value="Limousine" <?= $vehicleType == 'Limousine' ? 'selected' : '' ?>>Limousine</option>
+            <option value="3-Türer" <?= $vehicleType == '3-Türer' ? 'selected' : '' ?>>3-Türer</option>
+            <option value="Combi" <?= $vehicleType == 'Combi' ? 'selected' : '' ?>>Combi</option>
+            <option value="Cabrio" <?= $vehicleType == 'Cabrio' ? 'selected' : '' ?>>Cabrio</option>
+            <option value="Turnier" <?= $vehicleType == 'Turnier' ? 'selected' : '' ?>>Turnier</option>
+            <option value="Aut." <?= $vehicleType == 'Aut.' ? 'selected' : '' ?>>Aut.</option>
+            <option value="Touring" <?= $vehicleType == 'Touring' ? 'selected' : '' ?>>Touring</option>
+            <option value="Allspace" <?= $vehicleType == 'Allspace' ? 'selected' : '' ?>>Allspace</option>
+            <option value="Cabriolet" <?= $vehicleType == 'Cabriolet' ? 'selected' : '' ?>>Cabriolet</option>
+            <option value="T-Modell" <?= $vehicleType == 'T-Modell' ? 'selected' : '' ?>>T-Modell</option>
+            <option value="Touring Aut." <?= $vehicleType == 'Touring Aut.' ? 'selected' : '' ?>>Touring Aut.</option>
+            <option value="Coupé" <?= $vehicleType == 'Coupé' ? 'selected' : '' ?>>Coupé</option>
+            <option value="Transporter" <?= $vehicleType == 'Transporter' ? 'selected' : '' ?>>Transporter</option>
+            <option value="Roadster" <?= $vehicleType == 'Roadster' ? 'selected' : '' ?>>Roadster</option>
         </select>
+
         
         <label for="transmission">Getriebe:</label>
         <select id="transmission" name="transmission">
-            <option value="">alle</option>
-            <option value="Automatic">Automatik</option>
+            <option value="" <?= $transmission == '' ? 'selected' : '' ?>>Alle</option>
+            <option value="Automatikschaltung" <?= $transmission == 'Automatikschaltung' ? 'selected' : '' ?>>Automatikschaltung</option>
+            <option value="manuelle Schaltung" <?= $transmission == 'manuelle Schaltung' ? 'selected' : '' ?>>manuelle Schaltung</option>
         </select>
         
         <label for="fuelType">Kraftstoff:</label>
@@ -118,7 +169,11 @@ echo "Total rows found: " . $result_filtered->num_rows;
             <option value="Diesel">Diesel</option>
         </select>
         
-        <button type="submit">Filtern</button>
+        <button type="submit" name="filter" value="1">Filtern</button>
+        <button type="submit" name="reset" value="1">Filter zurücksetzen</button>
+        <a href="index.php" style="display: inline-block; padding: 6px 12px; background-color: #ccc; color: black; text-decoration: none; border-radius: 4px; margin-left: 10px;">
+        alle Filter zurücksetzen
+        </a>
     </form>
     
     <table border="1">
