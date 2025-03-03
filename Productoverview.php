@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "car_rental";
+$database = "testus";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
@@ -34,13 +34,16 @@ $return = isset($_GET['return']) ? $conn->real_escape_string($_GET['return']) : 
 
 
 //Reset all filters
-$filterFields = ['manufacturer', 'vehicleType', 'location', 'transmission', 'fuelType']; // List of all filters
+$filterFields = ['manufacturer', 'vehicleType', 'location', 'transmission', 'fuelType', 'seats', 'doors']; // List of all filters
 
 if (isset($_GET['reset'])) {
     // empty all filters
     foreach ($filterFields as $field) {
         $$field = ''; 
     }
+
+    $gps = '';
+    $climate = '';
 } else {
     // Werte aus dem Formular übernehmen
     foreach ($filterFields as $field) {
@@ -50,11 +53,15 @@ if (isset($_GET['reset'])) {
 
 
 // Construct SQL query with filters
-$sql_filtered = "SELECT v.*, m.ImagePath, m.Manufacturer, m.ModelName, m.VehicleType, m.SeatCount, m.Transmission, m.FuelType, m.PricePerDay, l.City 
-        FROM Vehicles v
-        JOIN VehicleModels m ON v.ModelID = m.ModelID
-        JOIN Locations l ON v.LocationID = l.LocationID
-        WHERE 1=1";
+$sql_filtered = "SELECT v.*, m.ImagePath,m.Manufacturer, m.ModelName, m.VehicleType, m.SeatCount, m.Transmission, m.FuelType, m.PricePerDay, l.City 
+    FROM Vehicles v
+    JOIN VehicleModels m ON v.ModelID = m.ModelID
+    JOIN Locations l ON v.LocationID = l.LocationID
+    LEFT JOIN bookings b ON v.VehicleID = b.VehicleID 
+    AND ('$pickup' BETWEEN b.StartDate AND b.EndDate 
+        OR '$return' BETWEEN b.StartDate AND b.EndDate 
+        OR b.StartDate BETWEEN '$pickup' AND '$return')
+    WHERE b.BookingID IS NULL";
 
 if (!empty($location)) {
     $sql_filtered .= " AND l.City = '$location'";
@@ -75,13 +82,13 @@ if (!empty($seats)) {
     $sql_filtered .= " AND m.SeatCount = '$seats'";
 }
 if (!empty($doors)) {
-    $sql_filtered .= " AND v.Doors = '$doors'";
+    $sql_filtered .= " AND m.Doors = '$doors'";
 }
 if (!empty($climate)) {
-    $sql_filtered .= " AND v.ClimateControl = 1";
+    $sql_filtered .= " AND m.ClimateControl = 1";
 }
 if (!empty($gps)) {
-    $sql_filtered .= " AND v.GPS = 1";
+    $sql_filtered .= " AND m.GPS = 1";
 }
 if (!empty($age)) {
     $sql_filtered .= " AND v.Year >= YEAR(CURDATE()) - $age";
@@ -275,6 +282,12 @@ $result_filtered = $conn->query($sql_filtered);
             <option value="Bielefeld" <?= $location == 'Bielefeld' ? 'selected' : '' ?>>Bielefeld</option>
             <option value="Nürnberg" <?= $location == 'Nürnberg' ? 'selected' : '' ?>>Nürnberg</option>
         </select>
+
+        <label for="pickup">Abholdatum:</label>
+            <input type="date" id="pickup" name="pickup" value="<?php echo htmlspecialchars($pickup); ?>">
+
+            <label for="return">Rückgabedatum:</label>
+            <input type="date" id="return" name="return" value="<?php echo htmlspecialchars($return); ?>">
         
         <label for="manufacturer">Hersteller:</label>
         <select id="manufacturer" name="manufacturer">
@@ -286,6 +299,36 @@ $result_filtered = $conn->query($sql_filtered);
         <option value="Opel" <?= $manufacturer == 'Opel' ? 'selected' : '' ?>>Opel</option>
         <option value="Skoda" <?= $manufacturer == 'Skoda' ? 'selected' : '' ?>>Skoda</option>
         </select>
+
+        <label for="seats">Sitze:</label>
+        <select id="seats" name="seats">
+            <option value="" <?= $seats == '' ? 'selected' : '' ?>>alle</option>
+            <option value="2" <?= $seats == 2 ? 'selected' : '' ?>>2</option>
+            <option value="4" <?= $seats == 4 ? 'selected' : '' ?>>4</option>
+            <option value="5" <?= $seats == 5 ? 'selected' : '' ?>>5</option>
+            <option value="7" <?= $seats == 7 ? 'selected' : '' ?>>7</option>
+            <option value="9" <?= $seats == 9 ? 'selected' : '' ?>>9</option>
+        </select>
+
+        <label for="doors">Türen:</label>
+        <select id="doors" name="doors">
+            <option value="" <?= $doors == '' ? 'selected' : '' ?>>alle</option>
+            <option value="2" <?= $doors == 2 ? 'selected' : '' ?>>2</option>
+            <option value="3" <?= $doors == 3 ? 'selected' : '' ?>>3</option>
+            <option value="4" <?= $doors == 4 ? 'selected' : '' ?>>4</option>
+            <option value="5" <?= $doors == 5 ? 'selected' : '' ?>>5</option>
+        </select>
+
+        <label>
+            GPS
+            <input type="checkbox" name="gps" value="1" <?php if(isset($_GET['gps'])) echo 'checked'; ?>>
+        </label>
+
+        <label>
+            Klimaanlage
+            <input type="checkbox" name="climate" value="1" <?php if(isset($_GET['climate'])) echo 'checked'; ?>>
+        </label>
+
         
         <label for="vehicleType">Typ:</label>
         <select id="vehicleType" name="vehicleType">
@@ -324,7 +367,7 @@ $result_filtered = $conn->query($sql_filtered);
         </select>
         
         <button type="submit" name="filter" value="1">Filtern</button>
-        <button type="submit" name="reset" value="1">Filter zurücksetzen</button>
+        <button type="submit" name="reset" value="1" onclick="clearCheckboxes()">Filter zurücksetzen</button>
         <a href="index.php" style="display: inline-block; padding: 6px 12px; background-color: #ccc; color: black; text-decoration: none; border-radius: 4px; margin-left: 10px;">
         alle Filter zurücksetzen
         </a>
@@ -348,7 +391,7 @@ $result_filtered = $conn->query($sql_filtered);
                 <td>
                 <?php if (!empty($row['ImagePath'])): ?>
         
-                    <img src="<?= htmlspecialchars($row['ImagePath']) ?>" alt="Car Image" width="100" height="100" style="border-radius: 8px;">
+                    <img src="<?= htmlspecialchars($row['ImagePath']) ?>" alt="<?php echo $row['ImagePath']?>" width="100" height="100" style="border-radius: 8px;">
                 <?php else: ?>
                     <span style="color: red;">No Image</span> <!-- If image is missing -->
                 <?php endif; ?>
@@ -364,6 +407,7 @@ $result_filtered = $conn->query($sql_filtered);
             </tr>
         <?php endwhile; ?>
     </table>
+
     <div class="pagination">
     <!-- Previous Button -->
     <a href="?<?= http_build_query(array_merge($_GET, ['page' => max(1, $page - 1)])) ?>" 
@@ -377,6 +421,11 @@ $result_filtered = $conn->query($sql_filtered);
        class="button <?= ($page >= $totalPages) ? 'disabled' : '' ?>">Next ❯</a>
     </div>
 </body>
+<script>
+    function clearCheckboxes() {
+        document.querySelectorAll('input[type=checkbox]').forEach(checkbox => checkbox.checked = false);
+    }
+</script>
 </html>
 
 <?php $conn->close(); ?>
