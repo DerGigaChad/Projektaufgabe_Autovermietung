@@ -10,7 +10,7 @@ ob_start(); // Enable output buffering to prevent header issues
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$conn = new mysqli("localhost", "root", "", "car_rental");
+$conn = new mysqli("localhost", "root", "", "testus");
 
 // Check if the database connection was successful
 if ($conn->connect_error) {
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($password === $db_password) {
             // Set session variables
             $_SESSION["user_id"] = $user_id;
-            $_SESSION["username"] = $name;
+            $_SESSION["email"] = $email;
 
             // Redirect to the homepage
             header("Location: index.php");
