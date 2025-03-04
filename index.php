@@ -377,25 +377,25 @@
         <a href="#" class="browse-all">Alle durchstöbern</a>
     </div>
     <div class="vehicle-classes">
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/cabrio1.jpg');">
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/cabrio.jpg');">
             <div class="vehicle-class-text">Cabrios</div>
         </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/cabriolet1.jpg');">
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/cabriolet.png');">
             <div class="vehicle-class-text">Cabriolets</div>
         </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/combi1.jpg');">
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/kombi.jpg');">
             <div class="vehicle-class-text">Kombis</div>
         </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/coupe1.jpg');">
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/coupe.jpg');">
             <div class="vehicle-class-text">Coupés</div>
         </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/limousine1.jpg');">
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/limousine.jpg');">
             <div class="vehicle-class-text">Limousinen</div>
         </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/mehrsitzer1.jpg');">
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/mehrsitzer.png');">
             <div class="vehicle-class-text">Mehrsitzer</div>
         </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/suv1.jpg');">
+        <a href="#" class="vehicle-class-item" style="background-image: url('assets/suv.jpg');">
             <div class="vehicle-class-text">SUVs</div>
         </a>
     </div>
@@ -554,7 +554,7 @@
 
  /* Ihre flexible Autovermietung in Deutschland*/
         .about-us-section {
-           background-color:  #17202a;  
+           background-color:rgba(5, 6, 6, 0.36);; 
            padding: 50px 20px;  /* Add padding around the section */
            display: flex;
            justify-content: space-between;
@@ -744,7 +744,7 @@
     </section>
 
 
-<!-- Ihre flexible Autovermietung in Deutschland--> 
+<!-- About us--> 
 <section id="about-content" class="about-us-section">
     
         <div class="about-content">
@@ -752,10 +752,9 @@
             <p>Bei Vrooom bieten wir Ihnen mehr als nur ein Auto – wir bieten Ihnen eine außergewöhnliche Fahrerfahrung. Mit unserer exklusiven Flotte aus Premium-Fahrzeugen stehen wir Ihnen als verlässlicher Partner für Ihre Mietwagenbedürfnisse in Deutschland zur Seite. Ob für geschäftliche Reisen, besondere Anlässe oder unvergessliche Roadtrips – wir stellen sicher, dass jede Fahrt mit uns ein Erlebnis der Extraklasse wird.</p>
             <p>Unsere Fahrzeuge sind stets auf dem neuesten Stand der Technik und bieten Ihnen höchsten Komfort und Leistung. Profitieren Sie von unserem erstklassigen Service, der Ihnen jederzeit zur Verfügung steht.</p>
             <p>Möchten Sie mehr erfahren oder eine Buchung vornehmen? Kontaktieren Sie uns unter der Nummer. <p>
-            <button class="cta-button">Call on +49 989 446 7998
-                <p></p>
+            <button class="cta-button"
 
-                <p> wir sind immer für Sie da!</p>
+                <p> Wir sind immer für Sie da!</p>
             </button>
         </div>
         <div class="about-image">
