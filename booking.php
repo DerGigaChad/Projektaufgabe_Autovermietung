@@ -1,14 +1,53 @@
 <?php
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "testus";
+
+$conn = new mysqli($servername, $username, $password, $database);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 session_start(); // Start the session
 
 // Check if user is logged in
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Redirect to login if session is missing
     exit();
 }
 
-// Prepare an empty array for bookings
-$bookings = []; // No dummy data, only real database data will be shown
+$UserID = $_SESSION['user_id']; // Use UserID directly
+
+// Fetch user's bookings
+$sql = "SELECT b.StartDate, b.EndDate, l.City, m.Manufacturer, m.ModelName
+        FROM bookings b
+        JOIN Vehicles v ON b.VehicleID = v.VehicleID
+        JOIN VehicleModels m ON v.ModelID = m.ModelID
+        JOIN Locations l ON v.LocationID = l.LocationID
+        WHERE b.UserID = ? 
+        ORDER BY b.StartDate DESC";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $UserID);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$bookings = []; // Initialize empty array
+
+// Fetch results into an array
+while ($row = $result->fetch_assoc()) {
+    $bookings[] = [
+        'car' => $row['Manufacturer'] . ' ' . $row['ModelName'],
+        'date' => $row['StartDate'] . " - " . $row['EndDate'],
+        'location' => $row['City']
+    ];
+}
+
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
