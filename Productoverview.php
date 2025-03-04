@@ -15,7 +15,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get filter parameters from index.php
+
 $location = isset($_GET['location']) ? $conn->real_escape_string($_GET['location']) : '';
 $manufacturer = isset($_GET['manufacturer']) ? $conn->real_escape_string($_GET['manufacturer']) : '';
 $vehicleType = isset($_GET['vehicleType']) ? $conn->real_escape_string($_GET['vehicleType']) : '';
@@ -32,6 +32,8 @@ $sort = isset($_GET['sort']) ? $conn->real_escape_string($_GET['sort']) : 'Price
 $pickup = isset($_GET['pickup']) ? $conn->real_escape_string($_GET['pickup']) : '';
 $return = isset($_GET['return']) ? $conn->real_escape_string($_GET['return']) : '';
 
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Ensure page is at least 1
+if ($page < 1) $page = 1;
 
 //Reset all filters
 $filterFields = ['manufacturer', 'vehicleType', 'location', 'transmission', 'fuelType', 'seats', 'doors']; // List of all filters
@@ -40,10 +42,13 @@ if (isset($_GET['reset'])) {
     // empty all filters
     foreach ($filterFields as $field) {
         $$field = ''; 
-    }
+    } //Brauche ich das?
 
     $gps = '';
     $climate = '';
+
+    header("Location: Productoverview.php");
+    exit();
 } else {
     // Werte aus dem Formular übernehmen
     foreach ($filterFields as $field) {
@@ -52,66 +57,81 @@ if (isset($_GET['reset'])) {
 }
 
 
-// Construct SQL query with filters
-$sql_filtered = "SELECT v.*, m.ImagePath,m.Manufacturer, m.ModelName, m.VehicleType, m.SeatCount, m.Transmission, m.FuelType, m.PricePerDay, l.City 
-    FROM Vehicles v
-    JOIN VehicleModels m ON v.ModelID = m.ModelID
-    JOIN Locations l ON v.LocationID = l.LocationID
-    LEFT JOIN bookings b ON v.VehicleID = b.VehicleID 
-    AND ('$pickup' BETWEEN b.StartDate AND b.EndDate 
-        OR '$return' BETWEEN b.StartDate AND b.EndDate 
-        OR b.StartDate BETWEEN '$pickup' AND '$return')
-    WHERE b.BookingID IS NULL";
+// Base query for filtering available vehicles
+$sql_filtered = "SELECT v.*, m.ImagePath, m.Manufacturer, m.ModelName, m.VehicleType, 
+                        m.SeatCount, m.Transmission, m.FuelType, m.PricePerDay, l.City 
+                 FROM Vehicles v
+                 JOIN VehicleModels m ON v.ModelID = m.ModelID
+                 JOIN Locations l ON v.LocationID = l.LocationID
+                 LEFT JOIN bookings b ON v.VehicleID = b.VehicleID 
+                AND ('$pickup' < b.EndDate AND '$return' > b.StartDate) 
+                WHERE b.VehicleID IS NULL
+                "; // Ensuring only available vehicles
+
+// Apply filters (same for both queries)
+$filterConditions = "";
 
 if (!empty($location)) {
-    $sql_filtered .= " AND l.City = '$location'";
+    $filterConditions .= " AND l.City = '" . $conn->real_escape_string($location) . "'";
 }
 if (!empty($manufacturer)) {
-    $sql_filtered .= " AND m.Manufacturer = '$manufacturer'";
+    $filterConditions .= " AND m.Manufacturer = '" . $conn->real_escape_string($manufacturer) . "'";
 }
 if (!empty($vehicleType)) {
-    $sql_filtered .= " AND m.VehicleType = '$vehicleType'";
+    $filterConditions .= " AND m.VehicleType = '" . $conn->real_escape_string($vehicleType) . "'";
 }
 if (!empty($transmission)) {
-    $sql_filtered .= " AND m.Transmission = '$transmission'";
+    $filterConditions .= " AND m.Transmission = '" . $conn->real_escape_string($transmission) . "'";
 }
 if (!empty($fuelType)) {
-    $sql_filtered .= " AND m.FuelType = '$fuelType'";
+    $filterConditions .= " AND m.FuelType = '" . $conn->real_escape_string($fuelType) . "'";
 }
 if (!empty($seats)) {
-    $sql_filtered .= " AND m.SeatCount = '$seats'";
+    $filterConditions .= " AND m.SeatCount = '" . (int)$seats . "'";
 }
 if (!empty($doors)) {
-    $sql_filtered .= " AND m.Doors = '$doors'";
+    $filterConditions .= " AND m.Doors = '" . (int)$doors . "'";
 }
 if (!empty($climate)) {
-    $sql_filtered .= " AND m.ClimateControl = 1";
+    $filterConditions .= " AND m.ClimateControl = 1";
 }
 if (!empty($gps)) {
-    $sql_filtered .= " AND m.GPS = 1";
+    $filterConditions .= " AND m.GPS = 1";
 }
 if (!empty($age)) {
-    $sql_filtered .= " AND v.Year >= YEAR(CURDATE()) - $age";
+    $filterConditions .= " AND v.Year >= YEAR(CURDATE()) - " . (int)$age;
 }
 if (!empty($drive)) {
-    $sql_filtered .= " AND v.DriveType = '$drive'";
+    $filterConditions .= " AND m.DriveType = '" . $conn->real_escape_string($drive) . "'";
 }
 if (!empty($price)) {
-    $sql_filtered .= " AND m.PricePerDay <= $price";
+    $filterConditions .= " AND m.PricePerDay <= " . (float)$price;
 }
 
-$limit = 25; // Number of results per page
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Get current page
-if ($page < 1) $page = 1; // Ensure page is at least 1
-$offset = ($page - 1) * $limit; // Calculate offset for SQL query
+// **COUNT QUERY** (Total Results Based on Filters)
+$sql_count = "SELECT COUNT(*) AS total FROM ($sql_filtered $filterConditions) AS filteredResults";
 
-// Get the total number of results
-$totalQuery = $conn->query("SELECT COUNT(*) FROM vehicles"); 
-$totalResults = $totalQuery->fetch_row()[0];
-$totalPages = ceil($totalResults / $limit);
+// Execute the count query
+$result_count = $conn->query($sql_count);
+$row_count = $result_count->fetch_assoc();
+$totalResults = $row_count['total'];
 
-$sql_filtered .= " ORDER BY $sort";
-$sql_filtered .= " LIMIT $limit OFFSET $offset";
+// **Pagination Setup**
+$limit = 5; // Number of results per page
+$totalPages = ($totalResults > 0) ? ceil($totalResults / $limit) : 1;
+$page = max(1, min($page, $totalPages)); // Ensure valid page number
+$offset = ($page - 1) * $limit;
+
+// **Final Filtered Query** (Now Includes Filters + Pagination)
+$sql_filtered .= $filterConditions; // Apply filters
+
+// Ensure $sort is valid (prevent SQL injection)
+$validSortOptions = ["PricePerDay ASC", "PricePerDay DESC"];
+if (!in_array($sort, $validSortOptions)) {
+    $sort = "PricePerDay ASC"; // Fallback auf die Standardsortierung
+}
+
+$sql_filtered .= " ORDER BY $sort LIMIT $limit OFFSET $offset";
 $result_filtered = $conn->query($sql_filtered);
 ?>
 
@@ -122,6 +142,82 @@ $result_filtered = $conn->query($sql_filtered);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produktübersicht - Autovermietung</title>
     <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        .car-list { display: flex; flex-wrap: wrap; gap: 20px; }
+        .car-item { border: 1px solid #ddd; padding: 10px; cursor: pointer; }
+        .car-item img { width: 150px; height: auto; }
+        .details-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1000; /* Ensure it appears on top */
+            border: 2px solid #ddd;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+            color: red; /* Make it visible */
+            background: white;
+            border: none;
+            outline: none;
+            padding: 5px;
+        }
+
+        .close-btn:hover {
+            color: darkred;
+        }
+
+        /* Dark overlay when popup is open */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .details-container {
+            display: flex;
+            align-items: center;
+            gap: 20px; /* Adds spacing between the image and text */
+        }
+
+        .details-container img {
+            max-width: 250px;
+            border-radius: 8px;
+        }
+
+        .details-text {
+            flex: 1;
+            font-size: 16px;
+            color: #222; /* Darker text for better readability */
+        }
+
+        .selected-period {
+            font-weight: bold;
+            color: #111; /* Even darker for emphasis */
+            margin-top: 10px;
+        }
+
+
+    </style>
     <style>
         /* <General Styles */
         * {
@@ -318,7 +414,14 @@ $result_filtered = $conn->query($sql_filtered);
             <option value="4" <?= $doors == 4 ? 'selected' : '' ?>>4</option>
             <option value="5" <?= $doors == 5 ? 'selected' : '' ?>>5</option>
         </select>
-
+        
+        <label for="transmission">Getriebe:</label>
+        <select id="transmission" name="transmission">
+            <option value="" <?= $transmission == '' ? 'selected' : '' ?>>Alle</option>
+            <option value="Automatikschaltung" <?= $transmission == 'Automatikschaltung' ? 'selected' : '' ?>>Automatikschaltung</option>
+            <option value="manuelle Schaltung" <?= $transmission == 'manuelle Schaltung' ? 'selected' : '' ?>>manuelle Schaltung</option>
+        </select>
+        
         <label>
             GPS
             <input type="checkbox" name="gps" value="1" <?php if(isset($_GET['gps'])) echo 'checked'; ?>>
@@ -349,13 +452,14 @@ $result_filtered = $conn->query($sql_filtered);
             <option value="Roadster" <?= $vehicleType == 'Roadster' ? 'selected' : '' ?>>Roadster</option>
         </select>
 
-        
-        <label for="transmission">Getriebe:</label>
-        <select id="transmission" name="transmission">
-            <option value="" <?= $transmission == '' ? 'selected' : '' ?>>Alle</option>
-            <option value="Automatikschaltung" <?= $transmission == 'Automatikschaltung' ? 'selected' : '' ?>>Automatikschaltung</option>
-            <option value="manuelle Schaltung" <?= $transmission == 'manuelle Schaltung' ? 'selected' : '' ?>>manuelle Schaltung</option>
-        </select>
+        <label for="drive">Antrieb:</label>
+            <select id="drive" name="drive">
+                <option value="" <?= $drive == '' ? 'selected' : '' ?>>Alle</option>
+                <option value="FWD" <?= $drive == 'FWD' ? 'selected' : '' ?>>Frontantrieb (FWD)</option>
+                <option value="RWD" <?= $drive == 'RWD' ? 'selected' : '' ?>>Heckantrieb (RWD)</option>
+                <option value="AWD" <?= $drive == 'AWD' ? 'selected' : '' ?>>Allradantrieb (AWD)</option>
+                <option value="4WD" <?= $drive == '4WD' ? 'selected' : '' ?>>4x4 (4WD)</option>
+            </select>
         
         <label for="fuelType">Kraftstoff:</label>
         <select id="fuelType" name="fuelType">
@@ -365,48 +469,63 @@ $result_filtered = $conn->query($sql_filtered);
             <option value="Hybrid" <?= $fuelType == 'Hybrid' ? 'selected' : '' ?>>Hybrid</option>
             <option value="Benzin" <?= $fuelType == 'Benzin' ? 'selected' : '' ?>>Benzin</option>
         </select>
+
+        <label for="price">Preis bis:</label>
+            <input type="number" id="price" name="price" min="0" step="1" value="<?= htmlspecialchars($price) ?>">
+        
+        <label for="sort">Sortiere nach:</label>
+            <select id="sort" name="sort">
+                <option value="PricePerDay ASC" <?= ($sort == 'PricePerDay ASC') ? 'selected' : '' ?>>Preis Aufsteigend</option>
+                <option value="PricePerDay DESC" <?= ($sort == 'PricePerDay DESC') ? 'selected' : '' ?>>Preis Absteigend</option>
+            </select>
+
         
         <button type="submit" name="filter" value="1">Filtern</button>
         <button type="submit" name="reset" value="1" onclick="clearCheckboxes()">Filter zurücksetzen</button>
         <a href="index.php" style="display: inline-block; padding: 6px 12px; background-color: #ccc; color: black; text-decoration: none; border-radius: 4px; margin-left: 10px;">
-        alle Filter zurücksetzen
+        Gesamte Auswahl zurücksetzen
         </a>
         </form>
         </div>
     
-    <table border="1">
-        <tr>
-            <th>Bild</th>
-            <th>Hersteller</th>
-            <th>Modell</th>
-            <th>Typ</th>
-            <th>Sitze</th>
-            <th>Getriebe</th>
-            <th>Kraftstoff</th>
-            <th>Preis pro Tag</th>
-            <th>Standort</th>
-        </tr>
-        <?php while ($row = $result_filtered->fetch_assoc()): ?>
+        <table border="1">
             <tr>
-                <td>
-                <?php if (!empty($row['ImagePath'])): ?>
-        
-                    <img src="<?= htmlspecialchars($row['ImagePath']) ?>" alt="<?php echo $row['ImagePath']?>" width="100" height="100" style="border-radius: 8px;">
-                <?php else: ?>
-                    <span style="color: red;">No Image</span> <!-- If image is missing -->
-                <?php endif; ?>
-                </td>
-                <td><?php echo htmlspecialchars($row['Manufacturer']); ?></td>
-                <td><?php echo htmlspecialchars($row['ModelName']); ?></td>
-                <td><?php echo htmlspecialchars($row['VehicleType']); ?></td>
-                <td><?php echo htmlspecialchars($row['SeatCount']); ?></td>
-                <td><?php echo htmlspecialchars($row['Transmission']); ?></td>
-                <td><?php echo htmlspecialchars($row['FuelType']); ?></td>
-                <td><?php echo htmlspecialchars($row['PricePerDay']); ?> €</td>
-                <td><?php echo htmlspecialchars($row['City']); ?></td>
+                <th>Bild</th>
+                <th>Hersteller</th>
+                <th>Modell</th>
+                <th>Typ</th>
+                <th>Sitze</th>
+                <th>Getriebe</th>
+                <th>Kraftstoff</th>
+                <th>Preis pro Tag</th>
+                <th>Standort</th>
             </tr>
-        <?php endwhile; ?>
-    </table>
+            <?php while ($row = $result_filtered->fetch_assoc()): ?>
+                <tr class="car-item" data-id="<?= $row['VehicleID']; ?>">
+                    <td>
+                        <?php if (!empty($row['ImagePath'])): ?>
+                            <img src="<?= htmlspecialchars($row['ImagePath']) ?>" alt="<?= htmlspecialchars($row['ModelName']) ?>" width="100" height="100" style="border-radius: 8px;">
+                        <?php else: ?>
+                            <span style="color: red;">No Image</span>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= htmlspecialchars($row['Manufacturer']); ?></td>
+                    <td><?= htmlspecialchars($row['ModelName']); ?></td>
+                    <td><?= htmlspecialchars($row['VehicleType']); ?></td>
+                    <td><?= htmlspecialchars($row['SeatCount']); ?></td>
+                    <td><?= htmlspecialchars($row['Transmission']); ?></td>
+                    <td><?= htmlspecialchars($row['FuelType']); ?></td>
+                    <td><?= htmlspecialchars($row['PricePerDay']); ?> €</td>
+                    <td><?= htmlspecialchars($row['City']); ?></td>
+                </tr>
+            <?php endwhile; ?>
+        </table>
+    
+    <!-- Pop-up für Fahrzeugdetails -->
+    <div class="details-popup" id="detailsPopup">
+        <span class="close-btn" onclick="hidePopup()">X</span>
+        <div id="detailsContent"></div>
+    </div>
 
     <div class="pagination">
     <!-- Previous Button -->
@@ -420,11 +539,41 @@ $result_filtered = $conn->query($sql_filtered);
     <a href="?<?= http_build_query(array_merge($_GET, ['page' => min($totalPages, $page + 1)])) ?>" 
        class="button <?= ($page >= $totalPages) ? 'disabled' : '' ?>">Next ❯</a>
     </div>
+
+
 </body>
 <script>
     function clearCheckboxes() {
         document.querySelectorAll('input[type=checkbox]').forEach(checkbox => checkbox.checked = false);
     }
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".car-item").forEach(function (item) {
+        item.addEventListener("click", function () {
+            let vehicleId = this.dataset.id;
+            let pickup = document.getElementById("pickup") ? document.getElementById("pickup").value : "";
+            let returnDate = document.getElementById("return") ? document.getElementById("return").value : "";
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "get_car_details.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    document.getElementById("detailsContent").innerHTML = xhr.responseText;
+                    document.getElementById("detailsPopup").style.display = "block";
+                }
+            };
+
+            xhr.send("vehicleId=" + vehicleId + "&pickup=" + pickup + "&return=" + returnDate);
+        });
+    });
+});
+
+function hidePopup() {
+    document.getElementById("detailsPopup").style.display = "none";
+}
 </script>
 </html>
 
