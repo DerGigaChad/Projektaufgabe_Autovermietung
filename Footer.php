@@ -167,7 +167,7 @@
             <footer class="footer-bottom">
                  <div class="footer-links">
         <p>
-        <span>&copy; <?php echo date("Y"); ?> Autoverleih. Alle Rechte vorbehalten.</span>
+        <span>&copy; <?php echo date("Y"); ?> Vrooom. Alle Rechte vorbehalten.</span>
             <a href="impressum.php">Impressum</a> | 
             <a href="daten.php">Datenschutz</a> | 
             <a href="agb.php">AGB </a> | 
