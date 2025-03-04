@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
-$conn = new mysqli("localhost", "root", "", "testus");
+$conn = new mysqli("localhost", "root", "", "car_rental");
 
 if ($conn->connect_error) {
     die("Verbindung fehlgeschlagen: " . $conn->connect_error);
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['vehicleId'])) {
                     <?php $buttonDisabled = "disabled"; ?>
                 <?php } ?>
 
-                <?php if (isset($_SESSION['user_id'])) { ?>
+                <?php if (isset($_SESSION['userID'])) { ?>
                     <form method='POST' action='book_car.php'>
                         <input type='hidden' name='vehicleId' value='<?= $vehicleId; ?>'>
                         <input type='hidden' name='start_date' value='<?= $pickup; ?>'>

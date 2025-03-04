@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "testus";
+$database = "car_rental"; 
 
 $conn = new mysqli($servername, $username, $password, $database);
 

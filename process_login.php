@@ -10,7 +10,7 @@ ob_start(); // Enable output buffering to prevent header issues
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$conn = new mysqli("localhost", "root", "", "testus");
+$conn = new mysqli("localhost", "root", "", "car_rental");
 
 // Check if the database connection was successful
 if ($conn->connect_error) {
@@ -29,13 +29,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($user_id, $name, $db_password);
+        $stmt->bind_result($userid, $name, $db_password);
         $stmt->fetch();
 
         // No `password_verify()` since passwords are stored in plaintext
         if ($password === $db_password) {
             // Set session variables
-            $_SESSION["user_id"] = $user_id;
+            $_SESSION["userID"] = $userid;
             $_SESSION["email"] = $email;
 
             // Redirect to the homepage

@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "testus";
+$database = "car_rental";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
@@ -14,12 +14,12 @@ if ($conn->connect_error) {
 session_start(); // Start the session
 
 // Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['userID'])) {
     header("Location: login.php"); // Redirect to login if session is missing
     exit();
 }
 
-$UserID = $_SESSION['user_id']; // Use UserID directly
+$UserID = $_SESSION['userID']; // Use UserID directly
 
 // Fetch user's bookings
 $sql = "SELECT b.StartDate, b.EndDate, l.City, m.Manufacturer, m.ModelName

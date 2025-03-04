@@ -1,18 +1,18 @@
 <?php
 session_start();
-$conn = new mysqli("localhost", "root", "", "testus");
+$conn = new mysqli("localhost", "root", "", "car_rental");
 
 if ($conn->connect_error) {
     die("Verbindung fehlgeschlagen: " . $conn->connect_error);
 }
 
 // Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['userID'])) {
     die("Fehler: Sie müssen eingeloggt sein, um eine Buchung vorzunehmen.");
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $userId = $_SESSION['user_id'];
+    $userId = $_SESSION['userID'];
     $vehicleId = $_POST['vehicleId'];
     $startDate = $_POST['start_date'];
     $endDate = $_POST['end_date'];

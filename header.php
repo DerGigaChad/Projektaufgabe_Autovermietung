@@ -2,7 +2,7 @@
 session_start(); // Start session to store user data
 
 // Get logged-in username
-$loggedInUser = isset($_SESSION['username']) ? $_SESSION['username'] : null;
+$loggedInUser = isset($_SESSION['userID']) ? $_SESSION['userID'] : null;
 ?>
 
 <!DOCTYPE html>
