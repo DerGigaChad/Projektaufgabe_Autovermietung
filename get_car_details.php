@@ -33,6 +33,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
 
     if ($row = $result->fetch_assoc()) {
+        // Fetch the tally (number of available cars for the selected model and city)
+        $tally_sql = "SELECT COUNT(v.VehicleID) AS AvailableCount
+                      FROM Vehicles v
+                      JOIN VehicleModels m ON v.ModelID = m.ModelID
+                      JOIN Locations l ON v.LocationID = l.LocationID
+                      WHERE m.ModelID = ? AND l.City = ?
+                      AND v.VehicleID NOT IN (
+                          SELECT b.VehicleID 
+                          FROM bookings b
+                          WHERE (b.StartDate <= ? AND b.EndDate >= ?)
+                      )";
+        $tally_stmt = $conn->prepare($tally_sql);
+        $tally_stmt->bind_param("isss", $modelId, $city, $return, $pickup);
+        $tally_stmt->execute();
+        $tally_result = $tally_stmt->get_result();
+        $tally_row = $tally_result->fetch_assoc();
+        $availableCount = $tally_row['AvailableCount'];
+
         // Display car details in the pop-up
         ?>
         <div class='details-container'>
@@ -45,6 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 Getriebe: <?= htmlspecialchars($row['Transmission']); ?><br>
                 GPS: <?= ($row['GPS'] ? 'Ja' : 'Nein'); ?> | Klimaanlage: <?= ($row['ClimateControl'] ? 'Ja' : 'Nein'); ?><br>
                 Preis: <strong><?= number_format($row['PricePerDay'], 2); ?> €</strong> pro Tag<br>
+                Verfügbare Autos: <strong><?= $availableCount; ?></strong><br> <!-- Tally display -->
+                Standort: <strong><?= htmlspecialchars($row['City']); ?></strong><br> <!-- City display -->
 
                 <?php if (!empty($pickup) && !empty($return)) { ?>
                     <p class='selected-period'>
@@ -75,6 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $stmt->close();
+    $tally_stmt->close();
     $conn->close();
 }
 ?>
