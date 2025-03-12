@@ -3,6 +3,7 @@ session_start(); // Start session to store user data
 
 // Get logged-in username
 $loggedInUser = isset($_SESSION['userID']) ? $_SESSION['userID'] : null;
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -140,10 +141,10 @@ $loggedInUser = isset($_SESSION['userID']) ? $_SESSION['userID'] : null;
 
         <!-- User info -->
         <div class="user-info">
-            <?php if ($loggedInUser): ?>
+            <?php if ($username): ?>
                 <!-- Display username if logged in -->
                 Hello, <a href="booking.php" style="color: rgb(255, 0, 43); text-decoration: none; font-weight: bold;">
-                    <?php echo htmlspecialchars($loggedInUser); ?>
+                    <?php echo htmlspecialchars($username); ?>
                 </a>
 
                 <!-- Logout button -->

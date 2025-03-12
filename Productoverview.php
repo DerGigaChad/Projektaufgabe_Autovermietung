@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 ?>
 <?php
 // Database connection
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -57,17 +58,6 @@ if (isset($_GET['reset'])) {
 }
 
 
-// Base query for filtering available vehicles
-$sql_filtered = "SELECT v.*, m.ImagePath, m.Manufacturer, m.ModelName, m.VehicleType, 
-                        m.SeatCount, m.Transmission, m.FuelType, m.PricePerDay, l.City 
-                 FROM Vehicles v
-                 JOIN VehicleModels m ON v.ModelID = m.ModelID
-                 JOIN Locations l ON v.LocationID = l.LocationID
-                 LEFT JOIN bookings b ON v.VehicleID = b.VehicleID 
-                AND ('$pickup' < b.EndDate AND '$return' > b.StartDate) 
-                WHERE b.VehicleID IS NULL
-                "; // Ensuring only available vehicles
-
 // Apply filters (same for both queries)
 $filterConditions = "";
 
@@ -108,11 +98,52 @@ if (!empty($price)) {
     $filterConditions .= " AND m.PricePerDay <= " . (float)$price;
 }
 
+// Base query for filtering available vehicles
+$sql_filtered = "SELECT m.ModelID, m.ImagePath, m.Manufacturer, m.ModelName, m.VehicleType, 
+                        m.SeatCount, m.Transmission, m.FuelType, m.PricePerDay, l.City, 
+                        COUNT(filtered_vehicles.VehicleID) AS AvailableCount
+                 FROM (
+                     SELECT v.VehicleID, v.ModelID, v.LocationID
+                     FROM Vehicles v
+                     JOIN VehicleModels m ON v.ModelID = m.ModelID
+                     JOIN Locations l ON v.LocationID = l.LocationID
+                     WHERE v.VehicleID NOT IN (
+                         SELECT b.VehicleID 
+                         FROM bookings b
+                         WHERE (b.StartDate <= '$return' AND b.EndDate >= '$pickup')
+                     )
+                     $filterConditions
+                 ) AS filtered_vehicles
+                 JOIN VehicleModels m ON filtered_vehicles.ModelID = m.ModelID
+                 JOIN Locations l ON filtered_vehicles.LocationID = l.LocationID
+                 GROUP BY m.ModelID, l.City";
+
 // **COUNT QUERY** (Total Results Based on Filters)
-$sql_count = "SELECT COUNT(*) AS total FROM ($sql_filtered $filterConditions) AS filteredResults";
+$sql_count = "SELECT COUNT(*) AS total
+              FROM (
+                  SELECT m.ModelID, l.City
+                  FROM (
+                      SELECT v.VehicleID, v.ModelID, v.LocationID
+                      FROM Vehicles v
+                      JOIN VehicleModels m ON v.ModelID = m.ModelID
+                      JOIN Locations l ON v.LocationID = l.LocationID
+                      WHERE v.VehicleID NOT IN (
+                          SELECT b.VehicleID 
+                          FROM bookings b
+                          WHERE (b.StartDate <= '$return' AND b.EndDate >= '$pickup')
+                      )
+                      $filterConditions
+                  ) AS filtered_vehicles
+                  JOIN VehicleModels m ON filtered_vehicles.ModelID = m.ModelID
+                  JOIN Locations l ON filtered_vehicles.LocationID = l.LocationID
+                  GROUP BY m.ModelID, l.City
+              ) AS grouped_results";
 
 // Execute the count query
 $result_count = $conn->query($sql_count);
+if (!$result_count) {
+    die("Error in count query: " . $conn->error);
+}
 $row_count = $result_count->fetch_assoc();
 $totalResults = $row_count['total'];
 
@@ -123,16 +154,11 @@ $page = max(1, min($page, $totalPages)); // Ensure valid page number
 $offset = ($page - 1) * $limit;
 
 // **Final Filtered Query** (Now Includes Filters + Pagination)
-$sql_filtered .= $filterConditions; // Apply filters
-
-// Ensure $sort is valid (prevent SQL injection)
-$validSortOptions = ["PricePerDay ASC", "PricePerDay DESC"];
-if (!in_array($sort, $validSortOptions)) {
-    $sort = "PricePerDay ASC"; // Fallback auf die Standardsortierung
-}
-
 $sql_filtered .= " ORDER BY $sort LIMIT $limit OFFSET $offset";
 $result_filtered = $conn->query($sql_filtered);
+if (!$result_filtered) {
+    die("Error in filtered query: " . $conn->error);
+}
 ?>
 
 <!DOCTYPE html>
@@ -350,6 +376,38 @@ $result_filtered = $conn->query($sql_filtered);
             pointer-events: none;
             opacity: 0.5;
         }
+
+        /* Toast Notification Styles */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #4CAF50; /* Green background for success */
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            right: 20px;
+            top: 20px;
+            font-size: 16px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {top: 0; opacity: 0;}
+            to {top: 20px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {top: 20px; opacity: 1;}
+            to {top: 0; opacity: 0;}
+        }
     </style>
 </head>
 <body>
@@ -501,10 +559,13 @@ $result_filtered = $conn->query($sql_filtered);
                 <th>Standort</th>
             </tr>
             <?php while ($row = $result_filtered->fetch_assoc()): ?>
-                <tr class="car-item" data-id="<?= $row['VehicleID']; ?>">
+                <tr class="car-item" data-id="<?= $row['ModelID']; ?>" data-city="<?= htmlspecialchars($row['City']); ?>">
                     <td>
                         <?php if (!empty($row['ImagePath'])): ?>
-                            <img src="<?= htmlspecialchars($row['ImagePath']) ?>" alt="<?= htmlspecialchars($row['ModelName']) ?>" width="100" height="100" style="border-radius: 8px;">
+                            <img src="<?= htmlspecialchars($row['ImagePath']) ?>" alt="<?= htmlspecialchars($row['ImagePath']) ?>" width="100" height="100" style="border-radius: 8px;">
+                            <span style="font-size: 12px; color: #fff; background-color: #4CAF50; padding: 2px 5px; border-radius: 3px; margin-left: 5px;">
+                                x<?= htmlspecialchars($row['AvailableCount']); ?>
+                            </span>
                         <?php else: ?>
                             <span style="color: red;">No Image</span>
                         <?php endif; ?>
@@ -540,8 +601,41 @@ $result_filtered = $conn->query($sql_filtered);
        class="button <?= ($page >= $totalPages) ? 'disabled' : '' ?>">Next ❯</a>
     </div>
 
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
 
 </body>
+<script>
+    // Check for booking success message
+    <?php if (isset($_SESSION['booking_success'])): ?>
+        showToast("<?php echo $_SESSION['booking_success']; ?>", "success");
+        <?php unset($_SESSION['booking_success']); // Clear the message after displaying ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['booking_error'])): ?>
+        showToast("<?php echo $_SESSION['booking_error']; ?>", "error");
+        <?php unset($_SESSION['booking_error']); // Clear the message after displaying ?>
+    <?php endif; ?>
+
+    // Function to show toast notification
+    function showToast(message, type) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.className = "toast show";
+
+        // Set background color based on type
+        if (type === "success") {
+            toast.style.backgroundColor = "#4CAF50"; // Green for success
+        } else if (type === "error") {
+            toast.style.backgroundColor = "#f44336"; // Red for error
+        }
+
+        // Hide the toast after 3 seconds
+        setTimeout(() => {
+            toast.className = toast.className.replace("show", "");
+        }, 3000);
+    }
+</script>
 <script>
     function clearCheckboxes() {
         document.querySelectorAll('input[type=checkbox]').forEach(checkbox => checkbox.checked = false);
@@ -551,7 +645,8 @@ $result_filtered = $conn->query($sql_filtered);
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".car-item").forEach(function (item) {
         item.addEventListener("click", function () {
-            let vehicleId = this.dataset.id;
+            let modelId = this.dataset.id;
+            let city = this.dataset.city;
             let pickup = document.getElementById("pickup") ? document.getElementById("pickup").value : "";
             let returnDate = document.getElementById("return") ? document.getElementById("return").value : "";
 
@@ -566,7 +661,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             };
 
-            xhr.send("vehicleId=" + vehicleId + "&pickup=" + pickup + "&return=" + returnDate);
+            xhr.send("modelId=" + modelId + "&city=" + city + "&pickup=" + pickup + "&return=" + returnDate);
         });
     });
 });

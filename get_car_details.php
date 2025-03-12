@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 session_start();
 $conn = new mysqli("localhost", "root", "", "car_rental");
 
@@ -8,38 +6,45 @@ if ($conn->connect_error) {
     die("Verbindung fehlgeschlagen: " . $conn->connect_error);
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['vehicleId'])) {
-    $vehicleId = $_POST['vehicleId'];
-    $pickup = isset($_POST['pickup']) ? $_POST['pickup'] : null;
-    $return = isset($_POST['return']) ? $_POST['return'] : null;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $modelId = $_POST['modelId'];
+    $city = $_POST['city'];
+    $pickup = $_POST['pickup'];
+    $return = $_POST['return'];
 
-    $sql = "SELECT v.VehicleID, m.Manufacturer, m.ModelName, m.ImagePath, l.City, m.vehicleType, 
-                   m.SeatCount, m.Doors, m.Transmission, m.GPS, m.ClimateControl, m.PricePerDay, 
-                   COUNT(v.VehicleID) AS AvailableCars
+    // Select a random available car from the specified model and city
+    $sql = "SELECT v.VehicleID, m.Manufacturer, m.ModelName, m.ImagePath, l.City, m.VehicleType, 
+                   m.SeatCount, m.Doors, m.Transmission, m.GPS, m.ClimateControl, m.PricePerDay
             FROM Vehicles v
             JOIN VehicleModels m ON v.ModelID = m.ModelID
             JOIN Locations l ON v.LocationID = l.LocationID
-            WHERE v.VehicleID = ?
-            GROUP BY v.ModelID, v.LocationID";
+            WHERE m.ModelID = ? AND l.City = ?
+            AND v.VehicleID NOT IN (
+                SELECT b.VehicleID 
+                FROM bookings b
+                WHERE (b.StartDate <= ? AND b.EndDate >= ?)
+            )
+            ORDER BY RAND()
+            LIMIT 1";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $vehicleId);
+    $stmt->bind_param("isss", $modelId, $city, $return, $pickup);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($row = $result->fetch_assoc()) {
+        // Display car details in the pop-up
         ?>
         <div class='details-container'>
             <img class='car-image' src='<?= htmlspecialchars($row['ImagePath']); ?>' alt='Car Image'>
             <div class='details-text'>
                 <strong><?= htmlspecialchars($row['Manufacturer'] . " " . $row['ModelName']); ?></strong><br>
                 <span class='location'>Standort: <?= htmlspecialchars($row['City']); ?></span><br>
-                Typ: <?= htmlspecialchars($row['vehicleType']); ?><br>
+                Typ: <?= htmlspecialchars($row['VehicleType']); ?><br>
                 Sitze: <?= htmlspecialchars($row['SeatCount']); ?> | Türen: <?= htmlspecialchars($row['Doors']); ?><br>
                 Getriebe: <?= htmlspecialchars($row['Transmission']); ?><br>
                 GPS: <?= ($row['GPS'] ? 'Ja' : 'Nein'); ?> | Klimaanlage: <?= ($row['ClimateControl'] ? 'Ja' : 'Nein'); ?><br>
                 Preis: <strong><?= number_format($row['PricePerDay'], 2); ?> €</strong> pro Tag<br>
-                Verfügbare Autos: <?= htmlspecialchars($row['AvailableCars']); ?><br>
 
                 <?php if (!empty($pickup) && !empty($return)) { ?>
                     <p class='selected-period'>
@@ -54,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['vehicleId'])) {
 
                 <?php if (isset($_SESSION['userID'])) { ?>
                     <form method='POST' action='book_car.php'>
-                        <input type='hidden' name='vehicleId' value='<?= $vehicleId; ?>'>
+                        <input type='hidden' name='vehicleId' value='<?= $row['VehicleID']; ?>'>
                         <input type='hidden' name='start_date' value='<?= $pickup; ?>'>
                         <input type='hidden' name='end_date' value='<?= $return; ?>'>
                         <button type='submit' class='book-btn' <?= $buttonDisabled; ?>>Jetzt buchen</button>
@@ -65,8 +70,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['vehicleId'])) {
             </div>
         </div>
         <?php
+    } else {
+        echo "<p style='color: red;'>Kein verfügbares Fahrzeug gefunden.</p>";
     }
+
     $stmt->close();
+    $conn->close();
 }
-$conn->close();
 ?>

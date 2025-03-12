@@ -22,30 +22,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Fehler: Ungültige Daten.");
     }
 
-    // Prevent double bookings (Check if the vehicle is already booked in the selected period, including exact same-day bookings)
-    $checkSql = "SELECT * FROM bookings WHERE VehicleID = ? AND (NOT (EndDate < ? OR StartDate > ?) OR (StartDate = ? AND EndDate = ?))";
+    // Prevent double bookings (check for overlapping dates)
+    $checkSql = "SELECT * FROM bookings 
+                 WHERE VehicleID = ? 
+                 AND (StartDate < ? AND EndDate > ?)";
     $stmt = $conn->prepare($checkSql);
-    $stmt->bind_param("issss", $vehicleId, $startDate, $endDate, $startDate, $endDate);
+    $stmt->bind_param("iss", $vehicleId, $endDate, $startDate);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        die("Fehler: Dieses Fahrzeug ist für den gewählten Zeitraum bereits gebucht.");
-    }
-
-    // Insert booking into the database
-    $sql = "INSERT INTO bookings (UserID, VehicleID, StartDate, EndDate) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iiss", $userId, $vehicleId, $startDate, $endDate);
-
-    if ($stmt->execute()) {
-        echo "Erfolg: Ihre Buchung wurde gespeichert!";
+        $_SESSION['booking_error'] = "Fehler: Dieses Fahrzeug ist für den gewählten Zeitraum bereits gebucht.";
     } else {
-        echo "Fehler: " . $stmt->error;
+        // Insert booking into the database
+        $sql = "INSERT INTO bookings (UserID, VehicleID, StartDate, EndDate) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iiss", $userId, $vehicleId, $startDate, $endDate);
+
+        if ($stmt->execute()) {
+            $_SESSION['booking_success'] = "Erfolg: Ihre Buchung wurde gespeichert!";
+        } else {
+            $_SESSION['booking_error'] = "Fehler: " . $stmt->error;
+        }
     }
 
     $stmt->close();
-}
+    $conn->close();
 
-$conn->close();
+    // Redirect back to Productoverview.php
+    header("Location: Productoverview.php");
+    exit();
+}
 ?>

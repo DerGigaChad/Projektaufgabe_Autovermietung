@@ -17,6 +17,11 @@
             box-sizing: border-box;
         }
 
+        header {
+            position: absolute;
+            z-index: 1001;
+        }
+
         body {
             font-family: Arial, sans-serif;
             color: white;
@@ -239,39 +244,7 @@
                 color: cyan;
             }
 
-        .review-section {
-            width: 100%;
-            text-align: center;
-            padding: 50px 20px;
-            background-image: url('reviews-background.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .review-section h2 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-        }
-
-        .review-carousel {
-            display: flex;
-            overflow: hidden;
-            scroll-behavior: smooth;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .review-item {
-            flex: 0 0 80%;
-            margin: 0 10px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            text-align: center;
-        }
+        
 
         .filter-container {
             background: white;
@@ -311,6 +284,40 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+        }
+
+        .review-section {
+            width: 100%;
+            text-align: center;
+            padding: 50px 20px;
+            background-image: url('reviews-background.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .review-section h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .review-carousel {
+            display: flex;
+            overflow: hidden;
+            scroll-behavior: smooth;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .review-item {
+            flex: 0 0 80%;
+            margin: 0 10px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            text-align: center;
         }
 
         /* Adds a vignette effect to the entire Website */
@@ -357,7 +364,16 @@
                 <option value="Hamburg">Hamburg</option>
                 <option value="München">München</option>
                 <option value="Köln">Köln</option>
-                <option value="Frankfurt">Frankfurt</option>
+                <option value="Bochum">Bochum</option>
+                <option value="Rostock">Rostock</option>
+                <option value="Paderborn">Paderborn</option>
+                <option value="Leipzig">Leipzig</option>
+                <option value="Dortmund">Dortmund</option>
+                <option value="Freiburg">Freiburg</option>
+                <option value="Bremen">Bremen</option>
+                <option value="Dresden">Dresden</option>
+                <option value="Bielefeld">Bielefeld</option>
+                <option value="Nürnberg">Nürnberg</option>
             </select>
 
             <label for="pickup">Abholdatum:</label>
@@ -373,31 +389,31 @@
 <!-- Vehicle Classes Carousel -->
 <div class="section">
     <div class="section-header">
-        <h2>Fahrzeugklassen</h2>
+        <h2>Beliebte Fahrzeugklassen</h2>
         <a href="#" class="browse-all">Alle durchstöbern</a>
     </div>
     <div class="vehicle-classes">
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/cabrio.jpg');">
-            <div class="vehicle-class-text">Cabrios</div>
-        </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/cabriolet.png');">
-            <div class="vehicle-class-text">Cabriolets</div>
-        </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/kombi.jpg');">
-            <div class="vehicle-class-text">Kombis</div>
-        </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/coupe.jpg');">
-            <div class="vehicle-class-text">Coupés</div>
-        </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/limousine.jpg');">
-            <div class="vehicle-class-text">Limousinen</div>
-        </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/mehrsitzer.png');">
-            <div class="vehicle-class-text">Mehrsitzer</div>
-        </a>
-        <a href="#" class="vehicle-class-item" style="background-image: url('assets/suv.jpg');">
-            <div class="vehicle-class-text">SUVs</div>
-        </a>
+            <a href="Productoverview.php?vehicleType=Cabrio" class="vehicle-class-item" style="background-image: url('assets/cabrio.jpg');">
+                <div class="vehicle-class-text">Cabrios</div>
+            </a>
+            <a href="Productoverview.php?vehicleType=Cabriolet" class="vehicle-class-item" style="background-image: url('assets/cabriolet.png');">
+                <div class="vehicle-class-text">Cabriolets</div>
+            </a>
+            <a href="Productoverview.php?vehicleType=Combi" class="vehicle-class-item" style="background-image: url('assets/kombi.jpg');">
+                <div class="vehicle-class-text">Combis</div>
+            </a>
+            <a href="Productoverview.php?vehicleType=Coupe" class="vehicle-class-item" style="background-image: url('assets/coupe.jpg');">
+                <div class="vehicle-class-text">Coupés</div>
+            </a>
+            <a href="Productoverview.php?vehicleType=Limousine" class="vehicle-class-item" style="background-image: url('assets/limousine.jpg');">
+                <div class="vehicle-class-text">Limousinen</div>
+            </a>
+            <a href="Productoverview.php?vehicleType=Transporter" class="vehicle-class-item" style="background-image: url('assets/mehrsitzer.png');">
+                <div class="vehicle-class-text">Mehrsitzer</div>
+            </a>
+            <a href="Productoverview.php?vehicleType=SUV" class="vehicle-class-item" style="background-image: url('assets/suv.jpg');">
+                <div class="vehicle-class-text">SUVs</div>
+            </a>
     </div>
 </div>
 
@@ -849,39 +865,43 @@
 
 </body>
 </html>
-    <div class="review-section" style="background-image: url('assets/roadtrip.jpg');">
-        <h2>Kundenrezensionen</h2>
-        <div class="review-carousel" id="reviews">
-            <div class="review-item">"Toller Service! Sehr zufrieden." - Max M.</div>
-            <div class="review-item">"Die Buchung war super einfach." - Lisa S.</div>
-            <div class="review-item">"Gute Preise und freundlicher Support." - Kevin H.</div>
-            <div class="review-item">"Alles top! Werde wieder buchen." - Sarah W.</div>
-            <div class="review-item">"Riesige Auswahl an Fahrzeugen." - Tim L.</div>
-            <div class="review-item">"Sehr empfehlenswert!" - Anna B.</div>
-            <div class="review-item">"Hervorragende Erfahrung!" - Jonas F.</div>
-        </div>
-    </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const carousel = document.getElementById("reviews");
-            function autoScroll() {
-                if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
-                    carousel.scrollTo({ left: 0, behavior: "smooth" });
-                } else {
-                    carousel.scrollBy({ left: 100, behavior: "smooth" });
-                }
-            }
-            setInterval(autoScroll, 1);
+<div class="review-section" style="background-image: url('assets/roadtrip.jpg');">
+    <h2>Kundenrezensionen</h2>
+    <div class="review-carousel" id="reviews">
+        <div class="review-item">"Toller Service! Sehr zufrieden." - Max M.</div>
+        <div class="review-item">"Die Buchung war super einfach." - Lisa S.</div>
+        <div class="review-item">"Gute Preise und freundlicher Support." - Kevin H.</div>
+        <div class="review-item">"Alles top! Werde wieder buchen." - Sarah W.</div>
+        <div class="review-item">"Riesige Auswahl an Fahrzeugen." - Tim L.</div>
+        <div class="review-item">"Sehr empfehlenswert!" - Anna B.</div>
+        <div class="review-item">"Hervorragende Erfahrung!" - Jonas F.</div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const carousel = document.getElementById("reviews");
+        const items = carousel.querySelectorAll('.review-item');
+        const itemWidth = items[0].offsetWidth + 20; // Include margin
+
+        // Clone items and append them to the carousel for seamless looping
+        items.forEach(item => {
+            const clone = item.cloneNode(true);
+            carousel.appendChild(clone);
         });
 
-        function scrollCarousel(id, direction) {
-            const carousel = document.getElementById(id);
-            const scrollAmount = 220; // Adjust based on item width and gap
-            const scrollPosition = carousel.scrollLeft + direction * scrollAmount;
-            carousel.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+        function autoScroll() {
+            if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
+                carousel.scrollTo({ left: 0, behavior: 'auto' });
+            } else {
+                carousel.scrollBy({ left: 10, behavior: 'smooth' });
+            }
         }
-    </script>
+
+        setInterval(autoScroll, 10); // Adjust the interval for smoother scrolling
+    });
+</script>
 
     <?php
     //footer
