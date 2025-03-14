@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($password === $db_password) {
             // Set session variables
             $_SESSION["userID"] = $userid;
-            $_SESSION["email"] = $email;
+            $_SESSION["username"] = $name;
 
             // Redirect to the homepage
             header("Location: index.php");
