@@ -772,13 +772,13 @@
             <p>Bei Vrooom bieten wir Ihnen mehr als nur ein Auto – wir bieten Ihnen eine außergewöhnliche Fahrerfahrung. Mit unserer exklusiven Flotte aus Premium-Fahrzeugen stehen wir Ihnen als verlässlicher Partner für Ihre Mietwagenbedürfnisse in Deutschland zur Seite. Ob für geschäftliche Reisen, besondere Anlässe oder unvergessliche Roadtrips – wir stellen sicher, dass jede Fahrt mit uns ein Erlebnis der Extraklasse wird.</p>
             <p>Unsere Fahrzeuge sind stets auf dem neuesten Stand der Technik und bieten Ihnen höchsten Komfort und Leistung. Profitieren Sie von unserem erstklassigen Service, der Ihnen jederzeit zur Verfügung steht.</p>
             
-            <button class="cta-button"
+            <button class="cta-button">
 
                 <p> Wir sind immer für Sie da!</p>
             </button>
         </div>
         <div class="about-image">
-            <img src="Pic-carrental1.jpg" alt="Car Rental Image">
+            <img src="assets/Pic-carrental1.jpg" alt="Car Rental Image">
     </div>
 </section>
 </body>
