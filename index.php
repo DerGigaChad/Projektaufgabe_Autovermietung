@@ -579,9 +579,9 @@
         }
 
 
- /* Ihre flexible Autovermietung in Deutschland*/
+  /* Welches Auto passt zu Ihnen?*/
         .about-us-section {
-           background-color:rgba #1e1e1e; 
+           background-color:rgb(26, 26, 24);
            font-family: 'Poppins', sans-serif;
            padding: 50px 20px;  /* Add padding around the section */
            display: flex;
@@ -611,20 +611,23 @@
         }
 
           .about-content h2 {
-          font-size: 32px;
-          margin-bottom: 20px;
-          font-weight: bold;
+          font-size: 2.5rem;
+          margin-bottom: 15px;
+          font-weight: 600;
+          color:#dddddd
+          
         }
 
           .about-content p {
-          font-size: 16px;
-          line-height: 1.6;
-          margin-bottom: 20px;
+          font-size: 1.0rem;
+          line-height: 1.8;
+          
+          color:#bbbbbb
         }
 
           .about-content .cta-button {
          padding: 15px 30px;
-         background-color:rgb(33, 39, 49);  /* Red color for the CTA button */
+         background-color:rgb(33, 39, 49);  /* color for the CTA button */
          border: none;
          color: white;
          font-size: 16px;
@@ -633,6 +636,7 @@
          transition: transform 0.2s ease;
          border-radius: 5px;
        }
+      
          .about-content .cta-button:hover {
          transform: scale(1.1);  /* Hover effect for the button */
        }
@@ -776,17 +780,25 @@
     </section>
 
 
-<!-- About us--> 
+<!-- About us (Welches Auto passt zu Ihnen?) --> 
 <section id="about-content" class="about-us-section">
     
         <div class="about-content">
-            <h2>Ihre flexible Autovermietung in Deutschland</h2>
-            <p>Bei Vrooom bieten wir Ihnen mehr als nur ein Auto – wir bieten Ihnen eine außergewöhnliche Fahrerfahrung. Mit unserer exklusiven Flotte aus Premium-Fahrzeugen stehen wir Ihnen als verlässlicher Partner für Ihre Mietwagenbedürfnisse in Deutschland zur Seite. Ob für geschäftliche Reisen, besondere Anlässe oder unvergessliche Roadtrips – wir stellen sicher, dass jede Fahrt mit uns ein Erlebnis der Extraklasse wird.</p>
-            <p>Unsere Fahrzeuge sind stets auf dem neuesten Stand der Technik und bieten Ihnen höchsten Komfort und Leistung. Profitieren Sie von unserem erstklassigen Service, der Ihnen jederzeit zur Verfügung steht.</p>
-            
-            <button class="cta-button">
+        <h2>Welches Auto passt zu Ihnen?</h2>
+    <p>Nicht sicher, welches Fahrzeug das richtige für Ihre Pläne ist?</p>
+    <p> Hier ist eine schnelle Übersicht:</p>
+    
+    <p>🚗 <strong>Kompakt & sparsam</strong>  ➜ Perfekt für Städtereisen & kurze Strecken.</p>
+    <p>🚙 <strong>SUV & Geländewagen</strong> ➜ Ideal für Familien, Abenteuer & lange Fahrten.</p>
+    <p>🚘 <strong>Limousine & Premium</strong> ➜ Stilvoll & luxuriös für Geschäftsreisen & besondere Anlässe.</p>
+    <p>⚡ <strong>Elektro & Hybrid</strong> ➜ Umweltfreundlich & modern unterwegs.</p>
+    <br></br>
 
-                <p> Wir sind immer für Sie da!</p>
+    <p>💡 <strong>Tipp:</strong> Nutzen Sie unsere Filteroptionen, um das passende Auto für Ihre Bedürfnisse zu finden!</p>
+            
+            <button class="cta-button" style="color: white;">
+
+                Jetzt Fahrzeuge entdecken
             </button>
         </div>
         <div class="about-image">
