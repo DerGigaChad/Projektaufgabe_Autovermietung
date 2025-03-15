@@ -1,22 +1,22 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-?>
-<?php
-// Database connection
+// Start a session to manage user data across pages
 session_start();
+
+// Database connection details
 $servername = "localhost";
 $username = "root";
 $password = "";
 $database = "car_rental"; 
 
+// Create a new MySQLi connection
 $conn = new mysqli($servername, $username, $password, $database);
 
+// Check if the connection failed and display an error message
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
+// Retrieve and sanitize filter values from the GET request
 $location = isset($_GET['location']) ? $conn->real_escape_string($_GET['location']) : '';
 $manufacturer = isset($_GET['manufacturer']) ? $conn->real_escape_string($_GET['manufacturer']) : '';
 $vehicleType = isset($_GET['vehicleType']) ? $conn->real_escape_string($_GET['vehicleType']) : '';
@@ -33,32 +33,34 @@ $sort = isset($_GET['sort']) ? $conn->real_escape_string($_GET['sort']) : 'Price
 $pickup = isset($_GET['pickup']) ? $conn->real_escape_string($_GET['pickup']) : '';
 $return = isset($_GET['return']) ? $conn->real_escape_string($_GET['return']) : '';
 
+// Pagination: Get the current page number from the GET request
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Ensure page is at least 1
 if ($page < 1) $page = 1;
 
-//Reset all filters
+// Reset all filters if the reset button is clicked
 $filterFields = ['manufacturer', 'vehicleType', 'location', 'transmission', 'fuelType', 'seats', 'doors']; // List of all filters
 
 if (isset($_GET['reset'])) {
-    // empty all filters
+   // Empty all filters
     foreach ($filterFields as $field) {
         $$field = ''; 
-    } //Brauche ich das?
+    }
 
     $gps = '';
     $climate = '';
 
+    // Redirect to the product overview page to reset the filters
     header("Location: Productoverview.php");
     exit();
 } else {
-    // Werte aus dem Formular übernehmen
+    // Populate filter values from the form submission
     foreach ($filterFields as $field) {
         $$field = isset($_GET[$field]) ? $_GET[$field] : '';
     }
 }
 
 
-// Apply filters (same for both queries)
+// Build the filter conditions for the SQL query based on the selected filters
 $filterConditions = "";
 
 if (!empty($location)) {
@@ -98,7 +100,7 @@ if (!empty($price)) {
     $filterConditions .= " AND m.PricePerDay <= " . (float)$price;
 }
 
-// Base query for filtering available vehicles
+// Base query to filter available vehicles based on the selected criteria
 $sql_filtered = "SELECT m.ModelID, m.ImagePath, m.Manufacturer, m.ModelName, m.VehicleType, 
                         m.SeatCount, m.Transmission, m.FuelType, m.PricePerDay, l.City, 
                         COUNT(filtered_vehicles.VehicleID) AS AvailableCount
@@ -118,7 +120,7 @@ $sql_filtered = "SELECT m.ModelID, m.ImagePath, m.Manufacturer, m.ModelName, m.V
                  JOIN Locations l ON filtered_vehicles.LocationID = l.LocationID
                  GROUP BY m.ModelID, l.City";
 
-// **COUNT QUERY** (Total Results Based on Filters)
+// Query to count the total number of results based on the filters
 $sql_count = "SELECT COUNT(*) AS total
               FROM (
                   SELECT m.ModelID, l.City
@@ -147,13 +149,13 @@ if (!$result_count) {
 $row_count = $result_count->fetch_assoc();
 $totalResults = $row_count['total'];
 
-// **Pagination Setup**
+// Pagination setup
 $limit = 5; // Number of results per page
 $totalPages = ($totalResults > 0) ? ceil($totalResults / $limit) : 1;
 $page = max(1, min($page, $totalPages)); // Ensure valid page number
 $offset = ($page - 1) * $limit;
 
-// **Final Filtered Query** (Now Includes Filters + Pagination)
+// Final filtered query with pagination
 $sql_filtered .= " ORDER BY $sort LIMIT $limit OFFSET $offset";
 $result_filtered = $conn->query($sql_filtered);
 if (!$result_filtered) {
@@ -170,81 +172,8 @@ if (!$result_filtered) {
     <link rel="stylesheet" href="styles.css">
     
     <style>
-        .car-list { display: flex; flex-wrap: wrap; gap: 20px; }
-        .car-item { border: 1px solid #ddd; padding: 10px; cursor: pointer; }
-        .car-item img { width: 150px; height: auto; }
-        .details-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60%;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            max-height: 80vh;
-            overflow-y: auto;
-            z-index: 1000; /* Ensure it appears on top */
-            border: 2px solid #ddd;
-        }
+        
 
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            cursor: pointer;
-            font-size: 24px;
-            font-weight: bold;
-            color: red; /* Make it visible */
-            background: white;
-            border: none;
-            outline: none;
-            padding: 5px;
-        }
-
-        .close-btn:hover {
-            color: darkred;
-        }
-
-        /* Dark overlay when popup is open */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-        .details-container {
-            display: flex;
-            align-items: center;
-            gap: 20px; /* Adds spacing between the image and text */
-        }
-
-        .details-container img {
-            max-width: 250px;
-            border-radius: 8px;
-        }
-
-        .details-text {
-            flex: 1;
-            font-size: 16px;
-            color: #222; /* Darker text for better readability */
-        }
-
-        .selected-period {
-            font-weight: bold;
-            color: #111; /* Even darker for emphasis */
-            margin-top: 10px;
-        }
-
-
-    </style>
-    <style>
         /* <General Styles */
         * {
             margin: 0;
@@ -341,7 +270,78 @@ if (!$result_filtered) {
             color: white;
         }
 
-        //////////////////////////
+        /* Styles for the car list and popup */
+        .car-list { display: flex; flex-wrap: wrap; gap: 20px; }
+        .car-item { border: 1px solid #ddd; padding: 10px; cursor: pointer; }
+        .car-item img { width: 150px; height: auto; }
+        .details-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1000; /* Ensure it appears on top */
+            border: 2px solid #ddd;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+            color: red; /* Make it visible */
+            background: white;
+            border: none;
+            outline: none;
+            padding: 5px;
+        }
+
+        .close-btn:hover {
+            color: darkred;
+        }
+
+        /* Dark overlay when popup is open */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .details-container {
+            display: flex;
+            align-items: center;
+            gap: 20px; /* Adds spacing between the image and text */
+        }
+
+        .details-container img {
+            max-width: 250px;
+            border-radius: 8px;
+        }
+
+        .details-text {
+            flex: 1;
+            font-size: 16px;
+            color: #222; /* Darker text for better readability */
+        }
+
+        .selected-period {
+            font-weight: bold;
+            color: #111; /* Even darker for emphasis */
+            margin-top: 10px;
+        }
         
         .pagination {
             margin-top: 20px;
@@ -642,31 +642,55 @@ if (!$result_filtered) {
     }
 </script>
 <script>
+    // Function to clear all checkboxes in the form
+    function clearCheckboxes() {
+        // Select all input elements of type 'checkbox' and uncheck them
+        document.querySelectorAll('input[type=checkbox]').forEach(checkbox => checkbox.checked = false);
+    }
+</script>
+
+<script>
+// Wait for the DOM to be fully loaded before executing the script
 document.addEventListener("DOMContentLoaded", function () {
+    // Select all elements with the class 'car-item' (each car in the list)
     document.querySelectorAll(".car-item").forEach(function (item) {
+        // Add a click event listener to each car item
         item.addEventListener("click", function () {
+            // Get the model ID and city from the data attributes of the clicked car item
             let modelId = this.dataset.id;
             let city = this.dataset.city;
+
+            // Get the pickup and return dates from the form inputs, if they exist
             let pickup = document.getElementById("pickup") ? document.getElementById("pickup").value : "";
             let returnDate = document.getElementById("return") ? document.getElementById("return").value : "";
 
+            // Create a new XMLHttpRequest object to send a request to the server
             let xhr = new XMLHttpRequest();
+            // Open a POST request to the 'get_car_details.php' endpoint
             xhr.open("POST", "get_car_details.php", true);
+            // Set the request header to indicate the content type
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
+            // Define the callback function to handle the response
             xhr.onreadystatechange = function () {
+                // Check if the request is complete and successful
                 if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Update the content of the popup with the response from the server
                     document.getElementById("detailsContent").innerHTML = xhr.responseText;
+                    // Display the popup
                     document.getElementById("detailsPopup").style.display = "block";
                 }
             };
 
+            // Send the request with the car details as URL-encoded data
             xhr.send("modelId=" + modelId + "&city=" + city + "&pickup=" + pickup + "&return=" + returnDate);
         });
     });
 });
 
+// Function to hide the details popup
 function hidePopup() {
+    // Hide the popup by setting its display style to 'none'
     document.getElementById("detailsPopup").style.display = "none";
 }
 </script>

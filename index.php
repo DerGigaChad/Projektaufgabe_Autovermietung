@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <?php
-    //header
+    // Include the header file (header.php)
     include("header.php");
     ?>
     
@@ -11,17 +11,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autovermietung SSJ</title>
     <style>
+        /* General reset for all elements */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* Header positioning */
         header {
             position: absolute;
             z-index: 1001;
         }
 
+        /* Body styling */
         body {
             font-family: Arial, sans-serif;
             color: white;
@@ -29,6 +32,7 @@
             background-color: #17202a;
         }
 
+        /* Container for the main content */
         .container {
             position: relative;
             height: 100vh;
@@ -38,7 +42,7 @@
             padding: 20px;
         }
 
-        /* Background Video */
+        /* Background video styling */
         .background-video {
             position: absolute;
             top: 0;
@@ -50,7 +54,7 @@
             box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
         }
 
-        /* Content Overlay */
+        /* Content overlay styling */
         .content {
             position: absolute;
             bottom: 50px;
@@ -69,7 +73,7 @@
                 text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
             }
 
-        /* Buttons */
+        /* Buttons styling */
         .buttons {
             display: flex;
             gap: 20px;
@@ -99,103 +103,103 @@
             color: black;
         }
         
-    /* Vehicle Classes Section (Static Grid) */
-.vehicle-classes {
-    display: flex;
-    flex-wrap: wrap; /* Allows wrapping to the next line if necessary */
-    gap: 20px; /* Space between images */
-    justify-content: center; /* Centers items horizontally */
-    padding: 20px 0;
-}
+        /* Vehicle Classes Section (Static Grid) */
+        .vehicle-classes {
+            display: flex;
+            flex-wrap: wrap; /* Allows wrapping to the next line if necessary */
+            gap: 20px; /* Space between images */
+            justify-content: center; /* Centers items horizontally */
+            padding: 20px 0;
+        }
 
-.vehicle-class-item {
-    flex: 0 0 150px; /* Fixed width */
-    height: 100px; /* Fixed height */
-    background-size: cover;
-    background-position: center;
-    border-radius: 10px;
-    position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    text-decoration: none; /* Removes underline from links */
-}
+        .vehicle-class-item {
+            flex: 0 0 150px; /* Fixed width */
+            height: 100px; /* Fixed height */
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-decoration: none; /* Removes underline from links */
+        }
 
-.vehicle-class-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
-}
+        .vehicle-class-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+        }
 
-.vehicle-class-text {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-}
-            /* Carousels */
-            .carousel-wrapper {
-                position: relative;
-            }
+        .vehicle-class-text {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        /* Carousels styling */
+        .carousel-wrapper {
+            position: relative;
+        }
 
-            .carousel {
-                margin: 20px 0;
-                padding: 20px;
-                overflow: hidden;
-                display: flex;
-                scroll-behavior: smooth;
-            }
+        .carousel {
+            margin: 20px 0;
+            padding: 20px;
+            overflow: hidden;
+            display: flex;
+            scroll-behavior: smooth;
+        }
 
-            .carousel-item {
-                flex: 0 0 auto;
-                width: 200px;
-                height: 300px;
-                margin-right: 15px;
-                background-size: cover;
-                background-position: center;
-                border-radius: 10px;
-                position: relative;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Schatten hinzugefügt */
-            }
+        .carousel-item {
+            flex: 0 0 auto;
+            width: 200px;
+            height: 300px;
+            margin-right: 15px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Shadow added */
+        }
 
-            .carousel-item:hover {
-                transform: scale(1.1); /* Größer bei Hover */
-                box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5); /* Intensiverer Schatten */
-            }
+        .carousel-item:hover {
+            transform: scale(1.1); /* Scale up on hover */
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5); /* Intensify shadow */
+        }
 
-            .carousel-item-text {
-                position: absolute;
-                bottom: 10px;
-                left: 10px;
-                background-color: rgba(0, 0, 0, 0.6);
-                color: white;
-                padding: 5px 10px;
-                border-radius: 5px;
-                font-size: 0.9rem;
-            }
+        .carousel-item-text {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
 
-            .carousel-button {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                background-color: rgba(0, 0, 0, 0.5);
-                border: none;
-                color: white;
-                padding: 10px;
-                cursor: pointer;
-                z-index: 1;
-            }
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1;
+        }
 
-            .carousel-button.left {
-                left: 10px;
-            }
+        .carousel-button.left {
+            left: 10px;
+        }
 
-            .carousel-button.right {
-                right: 10px;
-            }
+        .carousel-button.right {
+            right: 10px;
+        }
 
         .section {
             padding: 20px;
@@ -210,27 +214,28 @@
             position: relative;
         }
 
-            .section-header:hover .browse-all {
-                display: inline;
-            }
+        .section-header:hover .browse-all {
+            display: inline;
+        }
 
-            .section-header h2 {
-                margin: 0;
-            }
+        .section-header h2 {
+            margin: 0;
+        }
 
-            .section-header .btn-all {
-                background-color: rgba(255, 255, 255, 0.2);
-                color: white;
-                border: none;
-                padding: 10px 15px;
-                cursor: pointer;
-                text-transform: uppercase;
-                font-size: 0.9rem;
-            }
+        .section-header .btn-all {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
 
-                .section-header .btn-all:hover {
-                    background-color: rgba(255, 255, 255, 0.4);
-                }
+        .section-header .btn-all:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
         .browse-all {
             display: none;
             color: turquoise;
@@ -240,12 +245,12 @@
             transition: color 0.3s;
         }
 
-            .browse-all:hover {
-                color: cyan;
-            }
+        .browse-all:hover {
+            color: cyan;
+        }
 
         
-
+        /* Filter container styling */
         .filter-container {
             background: white;
             padding: 20px;
@@ -286,6 +291,7 @@
             border-radius: 5px;
         }
 
+        /* Review section styling */
         .review-section {
             width: 100%;
             text-align: center;
@@ -320,42 +326,47 @@
             text-align: center;
         }
 
-        /* Adds a vignette effect to the entire Website */
+        /* Vignette effect for the entire website except Header*/
         .vignette {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 50px; /* Höhe des Effekts */
+            height: 50px; /* Height of the effect */
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
-            pointer-events: none; /* Damit es keine Klicks blockiert */
+            pointer-events: none; /* Prevents blocking clicks */
             z-index: 999;
         }
     </style>
 </head>
 <body>
-
+    
+     <!-- Main container for the intro section -->
     <div class="container">
-        <!-- Intro Video -->
+        <!-- Background video for the intro section -->
         <video class="background-video" autoplay muted loop>
             <source src="assets/introauto.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
-        <!-- Content Overlay -->
+        <!-- Content overlay for the intro section -->
         <div class="content">
             <h1>Finde Dein Auto</h1>
             <p>Buche Dein Auto jederzeit, überall.</p>
             <div class="buttons">
-                <button class="btn btn-watch">Video anschauen</button>
-                <button class="btn btn-more">Mehr lernen</button>
+                <!-- Button für das Dummy-Video -->
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn btn-watch" style="text-decoration: none;">Video anschauen</a>
+                
+                <!-- Button für die Dummy-Weiterleitung -->
+                <a href="https://de.wikipedia.org/wiki/Automobil" target="_blank" class="btn btn-more" style="text-decoration: none;">Mehr lernen</a>
             </div>
         </div>
     </div>
 
     <!-- Adds a vignette effect to the entire Website (see above)-->
     <div class="vignette"></div>
-
+    
+    <!-- Filter container for searching vehicles -->
     <div class="filter-container">
         <form action="productoverview.php" method="GET">
             <label for="location">Ort:</label>
@@ -386,92 +397,92 @@
         </form>
     </div>
 
-<!-- Vehicle Classes Carousel -->
-<div class="section">
-    <div class="section-header">
-        <h2>Beliebte Fahrzeugklassen</h2>
-        <a href="#" class="browse-all">Alle durchstöbern</a>
-    </div>
-    <div class="vehicle-classes">
-            <a href="Productoverview.php?vehicleType=Cabrio" class="vehicle-class-item" style="background-image: url('assets/cabrio.jpg');">
-                <div class="vehicle-class-text">Cabrios</div>
-            </a>
-            <a href="Productoverview.php?vehicleType=Cabriolet" class="vehicle-class-item" style="background-image: url('assets/cabriolet.png');">
-                <div class="vehicle-class-text">Cabriolets</div>
-            </a>
-            <a href="Productoverview.php?vehicleType=Combi" class="vehicle-class-item" style="background-image: url('assets/kombi.jpg');">
-                <div class="vehicle-class-text">Combis</div>
-            </a>
-            <a href="Productoverview.php?vehicleType=Coupe" class="vehicle-class-item" style="background-image: url('assets/coupe.jpg');">
-                <div class="vehicle-class-text">Coupés</div>
-            </a>
-            <a href="Productoverview.php?vehicleType=Limousine" class="vehicle-class-item" style="background-image: url('assets/limousine.jpg');">
-                <div class="vehicle-class-text">Limousinen</div>
-            </a>
-            <a href="Productoverview.php?vehicleType=Transporter" class="vehicle-class-item" style="background-image: url('assets/mehrsitzer.png');">
-                <div class="vehicle-class-text">Mehrsitzer</div>
-            </a>
-            <a href="Productoverview.php?vehicleType=SUV" class="vehicle-class-item" style="background-image: url('assets/suv.jpg');">
-                <div class="vehicle-class-text">SUVs</div>
-            </a>
-    </div>
-</div>
-
-    <!-- Cities Carousel -->
-<div class="section">
-    <div class="section-header">
-        <h2>Städte</h2>
-        <a href="#" class="browse-all">Alle durchstöbern</a>
-    </div>
-    <div class="carousel-wrapper">
-    <button class="carousel-button left" onclick="scrollCarousel('cities', -1)">&lt;</button>
-    <div class="carousel" id="cities">
-        <a href="Productoverview.php?location=Hamburg" class="carousel-item" style="background-image: url('assets/hamburg.jpg');">
-            <div class="carousel-item-text">Hamburg</div>
-        </a>
-        <a href="Productoverview.php?location=Berlin" class="carousel-item" style="background-image: url('assets/berlin.jpg');">
-            <div class="carousel-item-text">Berlin</div>
-        </a>
-        <a href="Productoverview.php?location=Bielefeld" class="carousel-item" style="background-image: url('assets/bielefeld.jpg');">
-            <div class="carousel-item-text">Bielefeld</div>
-        </a>
-        <a href="Productoverview.php?location=Bochum" class="carousel-item" style="background-image: url('assets/bochum.jpg');">
-            <div class="carousel-item-text">Bochum</div>
-        </a>
-        <a href="Productoverview.php?location=Bremen" class="carousel-item" style="background-image: url('assets/bremen.jpg');">
-            <div class="carousel-item-text">Bremen</div>
-        </a>
-        <a href="Productoverview.php?location=Dortmund" class="carousel-item" style="background-image: url('assets/dortmund.jpg');">
-            <div class="carousel-item-text">Dortmund</div>
-        </a>
-        <a href="Productoverview.php?location=Dresden" class="carousel-item" style="background-image: url('assets/dresden.jpg');">
-            <div class="carousel-item-text">Dresden</div>
-        </a>
-        <a href="Productoverview.php?location=Freiburg" class="carousel-item" style="background-image: url('assets/freiburg.jpg');">
-            <div class="carousel-item-text">Freiburg</div>
-        </a>
-        <a href="Productoverview.php?location=Köln" class="carousel-item" style="background-image: url('assets/köln.jpg');">
-            <div class="carousel-item-text">Köln</div>
-        </a>
-        <a href="Productoverview.php?location=Leipzig" class="carousel-item" style="background-image: url('assets/leipzig.jpg');">
-            <div class="carousel-item-text">Leipzig</div>
-        </a>
-        <a href="Productoverview.php?location=München" class="carousel-item" style="background-image: url('assets/münchen.jpg');">
-            <div class="carousel-item-text">München</div>
-        </a>
-        <a href="Productoverview.php?location=Nürnberg" class="carousel-item" style="background-image: url('assets/nürnberg.jpg');">
-            <div class="carousel-item-text">Nürnberg</div>
-        </a>
-        <a href="Productoverview.php?location=Paderborn" class="carousel-item" style="background-image: url('assets/paderborn.jpg');">
-            <div class="carousel-item-text">Paderborn</div>
-        </a>
-        <a href="Productoverview.php?location=Rostock" class="carousel-item" style="background-image: url('assets/rostock.jpg');">
-            <div class="carousel-item-text">Rostock</div>
-        </a>
+    <!-- Vehicle Classes Carousel -->
+    <div class="section">
+        <div class="section-header">
+            <h2>Beliebte Fahrzeugklassen</h2>
+            <a href="#" class="browse-all">Alle durchstöbern</a>
         </div>
-        <button class="carousel-button right" onclick="scrollCarousel('cities', 1)">&gt;</button>
+        <div class="vehicle-classes">
+                <a href="Productoverview.php?vehicleType=Cabrio" class="vehicle-class-item" style="background-image: url('assets/cabrio.jpg');">
+                    <div class="vehicle-class-text">Cabrios</div>
+                </a>
+                <a href="Productoverview.php?vehicleType=Cabriolet" class="vehicle-class-item" style="background-image: url('assets/cabriolet.png');">
+                    <div class="vehicle-class-text">Cabriolets</div>
+                </a>
+                <a href="Productoverview.php?vehicleType=Combi" class="vehicle-class-item" style="background-image: url('assets/kombi.jpg');">
+                    <div class="vehicle-class-text">Combis</div>
+                </a>
+                <a href="Productoverview.php?vehicleType=Coupe" class="vehicle-class-item" style="background-image: url('assets/coupe.jpg');">
+                    <div class="vehicle-class-text">Coupés</div>
+                </a>
+                <a href="Productoverview.php?vehicleType=Limousine" class="vehicle-class-item" style="background-image: url('assets/limousine.jpg');">
+                    <div class="vehicle-class-text">Limousinen</div>
+                </a>
+                <a href="Productoverview.php?vehicleType=Transporter" class="vehicle-class-item" style="background-image: url('assets/mehrsitzer.png');">
+                    <div class="vehicle-class-text">Mehrsitzer</div>
+                </a>
+                <a href="Productoverview.php?vehicleType=SUV" class="vehicle-class-item" style="background-image: url('assets/suv.jpg');">
+                    <div class="vehicle-class-text">SUVs</div>
+                </a>
+        </div>
     </div>
-</div>
+
+    <!-- Cities Carousel Section -->
+    <div class="section">
+        <div class="section-header">
+            <h2>Städte</h2>
+            <a href="#" class="browse-all">Alle durchstöbern</a>
+        </div>
+        <div class="carousel-wrapper">
+        <button class="carousel-button left" onclick="scrollCarousel('cities', -1)">&lt;</button>
+        <div class="carousel" id="cities">
+            <a href="Productoverview.php?location=Hamburg" class="carousel-item" style="background-image: url('assets/hamburg.jpg');">
+                <div class="carousel-item-text">Hamburg</div>
+            </a>
+            <a href="Productoverview.php?location=Berlin" class="carousel-item" style="background-image: url('assets/berlin.jpg');">
+                <div class="carousel-item-text">Berlin</div>
+            </a>
+            <a href="Productoverview.php?location=Bielefeld" class="carousel-item" style="background-image: url('assets/bielefeld.jpg');">
+                <div class="carousel-item-text">Bielefeld</div>
+            </a>
+            <a href="Productoverview.php?location=Bochum" class="carousel-item" style="background-image: url('assets/bochum.jpg');">
+                <div class="carousel-item-text">Bochum</div>
+            </a>
+            <a href="Productoverview.php?location=Bremen" class="carousel-item" style="background-image: url('assets/bremen.jpg');">
+                <div class="carousel-item-text">Bremen</div>
+            </a>
+            <a href="Productoverview.php?location=Dortmund" class="carousel-item" style="background-image: url('assets/dortmund.jpg');">
+                <div class="carousel-item-text">Dortmund</div>
+            </a>
+            <a href="Productoverview.php?location=Dresden" class="carousel-item" style="background-image: url('assets/dresden.jpg');">
+                <div class="carousel-item-text">Dresden</div>
+            </a>
+            <a href="Productoverview.php?location=Freiburg" class="carousel-item" style="background-image: url('assets/freiburg.jpg');">
+                <div class="carousel-item-text">Freiburg</div>
+            </a>
+            <a href="Productoverview.php?location=Köln" class="carousel-item" style="background-image: url('assets/köln.jpg');">
+                <div class="carousel-item-text">Köln</div>
+            </a>
+            <a href="Productoverview.php?location=Leipzig" class="carousel-item" style="background-image: url('assets/leipzig.jpg');">
+                <div class="carousel-item-text">Leipzig</div>
+            </a>
+            <a href="Productoverview.php?location=München" class="carousel-item" style="background-image: url('assets/münchen.jpg');">
+                <div class="carousel-item-text">München</div>
+            </a>
+            <a href="Productoverview.php?location=Nürnberg" class="carousel-item" style="background-image: url('assets/nürnberg.jpg');">
+                <div class="carousel-item-text">Nürnberg</div>
+            </a>
+            <a href="Productoverview.php?location=Paderborn" class="carousel-item" style="background-image: url('assets/paderborn.jpg');">
+                <div class="carousel-item-text">Paderborn</div>
+            </a>
+            <a href="Productoverview.php?location=Rostock" class="carousel-item" style="background-image: url('assets/rostock.jpg');">
+                <div class="carousel-item-text">Rostock</div>
+            </a>
+            </div>
+            <button class="carousel-button right" onclick="scrollCarousel('cities', 1)">&gt;</button>
+        </div>
+    </div>
 
 <!DOCTYPE html>
 <html lang="de">
@@ -866,45 +877,47 @@
 </body>
 </html>
 
-<div class="review-section" style="background-image: url('assets/roadtrip.jpg');">
-    <h2>Kundenrezensionen</h2>
-    <div class="review-carousel" id="reviews">
-        <div class="review-item">"Toller Service! Sehr zufrieden." - Max M.</div>
-        <div class="review-item">"Die Buchung war super einfach." - Lisa S.</div>
-        <div class="review-item">"Gute Preise und freundlicher Support." - Kevin H.</div>
-        <div class="review-item">"Alles top! Werde wieder buchen." - Sarah W.</div>
-        <div class="review-item">"Riesige Auswahl an Fahrzeugen." - Tim L.</div>
-        <div class="review-item">"Sehr empfehlenswert!" - Anna B.</div>
-        <div class="review-item">"Hervorragende Erfahrung!" - Jonas F.</div>
+    <!-- Review Section -->
+    <div class="review-section" style="background-image: url('assets/roadtrip.jpg');">
+        <h2>Kundenrezensionen</h2>
+        <div class="review-carousel" id="reviews">
+            <div class="review-item">"Toller Service! Sehr zufrieden." - Max M.</div>
+            <div class="review-item">"Die Buchung war super einfach." - Lisa S.</div>
+            <div class="review-item">"Gute Preise und freundlicher Support." - Kevin H.</div>
+            <div class="review-item">"Alles top! Werde wieder buchen." - Sarah W.</div>
+            <div class="review-item">"Riesige Auswahl an Fahrzeugen." - Tim L.</div>
+            <div class="review-item">"Sehr empfehlenswert!" - Anna B.</div>
+            <div class="review-item">"Hervorragende Erfahrung!" - Jonas F.</div>
+        </div>
     </div>
-</div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const carousel = document.getElementById("reviews");
-        const items = carousel.querySelectorAll('.review-item');
-        const itemWidth = items[0].offsetWidth + 20; // Include margin
+    <!-- JavaScript for Review Carousel -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const carousel = document.getElementById("reviews");
+            const items = carousel.querySelectorAll('.review-item');
+            const itemWidth = items[0].offsetWidth + 20; // Include margin
 
-        // Clone items and append them to the carousel for seamless looping
-        items.forEach(item => {
-            const clone = item.cloneNode(true);
-            carousel.appendChild(clone);
-        });
+            // Clone items and append them to the carousel for seamless looping
+            items.forEach(item => {
+                const clone = item.cloneNode(true);
+                carousel.appendChild(clone);
+            });
 
-        function autoScroll() {
-            if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
-                carousel.scrollTo({ left: 0, behavior: 'auto' });
-            } else {
-                carousel.scrollBy({ left: 10, behavior: 'smooth' });
+            function autoScroll() {
+                if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
+                    carousel.scrollTo({ left: 0, behavior: 'auto' });
+                } else {
+                    carousel.scrollBy({ left: 10, behavior: 'smooth' });
+                }
             }
-        }
 
-        setInterval(autoScroll, 10); // Adjust the interval for smoother scrolling
-    });
-</script>
+            setInterval(autoScroll, 10); // Adjust the interval for smoother scrolling
+        });
+    </script>
 
     <?php
-    //footer
+    // Include the footer file (footer.php)
     include("Footer.php");
     ?>
 
