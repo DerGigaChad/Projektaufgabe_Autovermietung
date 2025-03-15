@@ -581,7 +581,8 @@
 
  /* Ihre flexible Autovermietung in Deutschland*/
         .about-us-section {
-           background-color:rgba(5, 6, 6, 0.36);; 
+           background-color:rgba #1e1e1e; 
+           font-family: 'Poppins', sans-serif;
            padding: 50px 20px;  /* Add padding around the section */
            display: flex;
            justify-content: space-between;
